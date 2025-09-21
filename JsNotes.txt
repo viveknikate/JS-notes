@@ -1,0 +1,805 @@
+Started: 25/08/2025
+Course Link: https://github.com/jonasschmedtmann/complete-javascript-course
+==============================================================================================================================
+Sec - 1: Intro
+==============================================================================================================================
+Sec - 2: Js Fundamentals: Part-1
+==============================================================================================================================
+console.log(11 +11 )
+alert('Hello world!')
+let js = "Vivek"
+if(js === "Vivek") alert(js)
+js = "Vivek23"
+if(js === "Vivek") alert(js)
+==============================================================================================================================
+- javascript is a high-level, Object oriented, multi-paradigm programming language.
+- programming language means instruct computer to do things.
+- high level programming language means
+     - more easily understood and used by humans, providing a higher level of abstraction from the underlying computer hardware.
+     - They abstract away low-level details of computer hardware, such as memory management, register allocation, and direct hardware interaction.
+     - They use syntax and commands that are closer to natural human language 
+     - High-level languages require a compiler or interpreter to translate the human-readable code into machine code
+==============================================================================================================================
+- HTML - is for content
+  CSS - for presentation
+  JS - for behavior/ interactivity
+  ES6 - ECMAScript 6 released in 2015 (All the versions after this are called Modern javascript)
+
+- variable name is written in camelCase in javascript
+- variable name can't start with number
+- variable name can contains number, letter, underscore and dollar sign
+- variable name can't be reserved keyword
+- variable name is case sensitive
+     let js = 'Amazing'
+     if (js === 'Amazing') alert(js);
+     console.log('Vivek Nikate');
+
+     let fname = 'Vivek';
+     console.log('my name', fname)
+
+     let v$s = 'asdfl'
+     console.log(v$s)
+
+// assignment - 1
+     let country, continent, population;
+
+     country = "India";
+     continent = "Asia";
+     population = 1380000000;
+     console.log(country, continent, population);
+
+     let isIsland = true;
+     let language;
+
+     console.log("The type of country is", typeof (country));
+     console.log("The type of country is", typeof country);           // both syntax work no need of () in typeof
+     console.log("The type of continent is", typeof (continent));
+     console.log("The type of population is", typeof (population));
+     console.log("The type of isIsland is", typeof (isIsland));
+     console.log("The type of language is", typeof (language));
+     console.log("null type ", typeof null);      // object
+
+
+     language = "Marathi";
+     console.log("The type of language is", typeof (language));
+
+     // assignment - 2
+     const country = "India", continent = "Asia";
+
+     let population = 1380000000;
+     console.log(country, continent, population);
+
+     // country = 'sadf';        // invalid, its const
+     // console.log(country);
+
+- MultiLine log statement
+     // using single quote
+     console.log('Vivek Nikate\n\
+                    Mahesh Nikate\
+                    Im always here to help & all')
+     
+     // using back tick
+     console.log(`Vivek Nikate
+               mahesh Nikate
+                         Nikate,            very very nice
+               Family 
+               Dipawali`)
+==============================================================================================================================
+const massMark = 78;
+const heightMark = 1.69;
+const massJohn = 92;
+const heightJohn = 1.95;
+
+const BMIMark = massMark / (heightMark * heightMark);
+const BMIJohn = massJohn / (heightJohn * heightJohn);
+console.log(BMIMark, BMIJohn);
+
+if(BMIMark > BMIJohn)
+    // console.log("Mark's BMI is higher than John's!");
+    console.log(`Mark's BMI (${BMIMark}) is higher than John's!`);
+else
+    // console.log("John's BMI is higher than Mark's!");
+    console.log(`John's BMI (${BMIJohn}) is higher than Mark's!`);
+==============================================================================================================================
+Type Conversion & coercion:
+     Conversion: we manually convert it from one type to another
+     coercion: javascript implicitly/ automatically converts one type to another.
+     eg.
+          const year = '1919'
+          console.log(year);                // 1919
+          console.log(typeof year);         // string
+
+          // it won't work
+          console.log(year + 10);           // 191910
+
+          // to make it work
+          console.log(Number(year) + 10);    //1929
+
+          // NaN = Not a Number
+          console.log(Number('Vivek')); // NaN .its not possible to convert it into Number
+
+          // its type is still Number even if its not possible to convert into Number, but its invalid Number
+          console.log(typeof Number('Vivek'));          // number
+          
+          // Convert to string
+          let v = 556;
+          console.log(v)
+
+          let s = String(v)
+          console.log(s, typeof s, v, typeof v);
+          // we can convert string/number into number/ string or boolean, but can't convert them into undefined or null
+
+          // type coercion
+          console.log('I\'am '+ 25 +' years old')         // here 25 automatically converted into string
+          //I'am 25 years old
+
+          // + converts number into string, so
+          console.log('10'+'20'+78);       // 102078
+
+          // - converts string into number
+          console.log('10'-'20'-78);       // -88
+
+          console.log('10'-'20'+78);      // = 10 - 20 + 78 
+                                        // = -10 + 78
+                                        // = 68
+          // till -1 its considered as string & concatenated after that converted to number
+          // = 10+20-1+78
+          // = 1020 - 1 + 78
+          // = 1019 + 78
+          // = 1097
+          console.log('10'+'20'- '1' + 78);       // 1097
+
+          console.log('2' * '100');           // 200
+          console.log('2' ** '10');          // 1024
+          console.log('22' / '11');          // 2
+
+          // = 2 + 2 / 11
+          // = 22 / 11
+          // = 2
+          console.log(('2' + '2') / '11');          // 2
+
+          let n = '1' + 1
+          n = n - 1;
+          console.log(n);           // 10
+          console.log(typeof n);           // 10
+
+          n = 2 + 3 + 4 + '5'; 
+          console.log(n);                  // 95
+          console.log(typeof n);          // string
+          // = 5 + 4 + '5'
+          // = 9 + '5'
+          // = 95
+
+          n = '10' - '4' - '3' - 2 + '5'         // - operator convert string into number
+          // = 6 - '3' - 2 + '5'
+          // = 3 - 2 + '5'
+          // = 1 + '5'
+          // = '15'
+          console.log(n);        // 15
+          console.log(typeof n);   // string
+
+          n = '100' - '5' + 100 + 200
+          // = 95 + 100 + 200
+          // = 195 + 200
+          // = 395
+          console.log(n);           // 395
+          console.log(typeof n);    // number
+
+          n = '100' - '200'
+          console.log(n);              // -100
+          console.log(typeof n);       // number
+
+          n = n + 45
+          console.log(n);           // -55
+          console.log(typeof n);    // number
+==============================================================================================================================
+Truthy & Falsy:
+     Falsy: Falsy values are not exactly false but will become false when we try to convert them into boolean
+     - these values will get converted into boolean false.
+          5 Falsy values: 0, '', undefined, null, NaN & false also.
+     - any number which is not zero or any string which is not empty will gets converted into truthy values means true.
+     - Converting to boolean is always implicit, means automatically gets converted into boolean also called type coercion.
+     eg.
+          console.log(Boolean(0))                    // false
+          console.log(Boolean(undefined))            // false
+          console.log(Boolean('Vivek'))              // true
+          console.log(Boolean(''))                    // false
+
+          // empty object
+          console.log(Boolean({}))                    // true
+
+          let s;       // here s is undefined
+          console.log(s);
+          if(s)
+          console.log('true way');
+          else
+          console.log('false way');
+          
+          (s) ? console.log('true way') : console.log('false way');
+
+          let money = 0;
+          money ? console.log('Don\'t spend..') : console.log('You should get a JOB.!');
+
+          money++;
+          money ? console.log('Don\'t spend..') : console.log('You should get a JOB.!');
+==============================================================================================================================
+Equality operator (== & ===):
+     const age = 78;
+     console.log((age === 78) ? 'yes':'no');
+
+     // loose equality operator
+     // does type coercion
+     console.log(18 == '18');   // true
+     console.log(18 == 18);   // true
+
+
+     // strict equality operator, does not do type coercion
+     // always use strict equality operator (===).
+     console.log(18 === '18');   // false  
+     console.log(18 === 19)    // false
+
+     const fav = Number(prompt('What\'s your favorite numb:'))
+     console.log(fav, 'its type is: ', typeof fav);
+
+     if(fav === 50)
+     console.log('its 50');
+     else if(fav === 1)
+     console.log('its 1');
+     else if(fav === 9)
+     console.log('its 9');
+     else
+     console.log('its not 50 or 1 or 9');
+
+     // strict not equality
+     if(fav !== 50)
+     console.log('its not 50')
+     if(fav != 1)   // loose not equal
+     console.log('its not 1')
+
+     console.log(null == undefined)    // true
+     console.log(null === undefined)   // false
+
+     console.log(null == 0)      // false
+     console.log(undefined == 0) // false
+
+==============================================================================================================================
+Boolean Logic:
+     a  = 1;
+     b = 0;
+     console.log(a,b)                   // 1 0
+     console.log("!a ",!a," !b ",!b)         // !a false !b true
+     console.log((a && b) ? 'yes': 'no');    // no
+     console.log((a || b) ? 'yes': 'no');    // yes
+     console.log((a ^ b) ? 'yes': 'no');     // yes
+     console.log((!a) ? 'yes': 'no');        // no
+     console.log((!b) ? 'yes': 'no');        // yes
+==============================================================================================================================
+Logical operator:
+     const goodVision = false
+     const DriverLic = true
+
+     const shouldDrive = goodVision && DriverLic;
+
+     if(shouldDrive)
+     console.log("yes");
+     else
+     console.log("no");
+==============================================================================================================================
+Test:
+     const scoreDolphins = (96+108+89)/3;
+     const scoreKoalas = (88+91+110)/3;
+
+     if(scoreDolphins > scoreKoalas)
+     console.log("Dolphins win the trophy");
+     else if(scoreDolphins < scoreKoalas)
+     console.log("Koalas win the trophy");
+     else
+     console.log("Both win the trophy");
+==============================================================================================================================
+Switch:
+     const day = 'sunday';
+     switch(day){
+          case 'monday':                // strict equality check day === 'monday
+               console.log('Its monday1');
+               console.log('Its monday2');
+               console.log('Its monday3');
+               console.log('Its monday4');
+               break;
+          case 'tuesday':
+               console.log('Its tuesday1');
+               console.log('Its tuesday2');
+               break;
+          case 'wednesday':
+               console.log('Its wednesday');
+               break;
+          case 'thursday':
+          case 'friday':
+               console.log('Its weekend coming');
+               break;
+          case 'saturday':
+          case 'sunday':
+               console.log('Its Holiday');
+               break;
+          default:
+               console.log("its out of Context")
+     }
+
+     // or
+          if(day === 'monday'){
+               console.log('Its monday1');
+               console.log('Its monday2');
+               console.log('Its monday3');
+               console.log('Its monday4');
+          } else if(day === 'tuesday'){
+               console.log('Its tuesday1');
+               console.log('Its tuesday2');
+          } else if(day === 'wednesday'){
+               console.log('Its wednesday');
+          } else if(day === 'thursday' || day === 'friday'){
+               console.log('Its weekend coming');
+          } else if(day === 'saturday' || day === 'sunday'){
+               console.log('Its Holiday');
+          } else {
+               console.log("its out of Context")
+          }
+==============================================================================================================================
+statement & expression:
+     statement: is a complete line of code.
+     eg.
+          if(){}
+          switch(){}
+
+     expression: is a piece of code that returns a value.
+     eg. 
+          100
+          'im vivek nikate'
+          2 + 3
+          true || false
+          1 < 2
+          let a = 2 + 3;
+          let b = true || false;
+==============================================================================================================================
+Conditional (ternary) operator:
+     const age = 25;
+     console.log(age >= 18 ? "Good Adult" : "Chlid");
+
+     const drink = age >= 18 ? "Good Adult1" : "Chlid1";
+     console.log(drink);
+     console.log(`Ouput is: ${age >= 18 ? "Good Adult1" : "Chlid1"}`);
+     // or
+     const bill = 275;
+     let tip = (bill >= 50 && bill <= 300) ? bill * (15/100) : bill * 0.2;
+     console.log(`The bill was ${bill}, the tip was ${tip}, and the total value ${bill+tip}`)
+==============================================================================================================================
+Sec-3: Js Fundamentals Part - 2
+==============================================================================================================================
+'use strict':  
+     'use strict'
+     let hasDriversLicense = false;
+     const passTest = true
+
+     if (passTest) hasDriverLicense = true                   -- mistake in hasDriverLicense spelling use strict will catch this
+     if (hasDriversLicense) console.log("I can drive");
+
+     // const interface = 'Vivek';              // strict mode will not allow us to create variable with reserved keyword
+     // const private = 'my private variable';
+     // const if = 45;
+==============================================================================================================================
+function:
+     function logger() {
+          console.log('My name is Vivek');
+     }
+
+     logger();
+     logger();
+     logger();
+     function makeJuice(fruit1, fruit2) {
+          return `Making Juice from ${fruit1} fruit1 and ${fruit2} fruit2. Enjoy.!`;
+     }
+
+     const Juice1 = makeJuice(10, 20);
+     const Juice2 = makeJuice(100, 120);
+     const Juice3 = makeJuice(1000, 110);
+     console.log(Juice1, Juice2, Juice3);
+
+     // arrow:
+          // Hoisting:
+          // Hoisting in JavaScript is a behavior where declarations of variables, functions, and classes are conceptually "moved" to the top of their containing scope during the compilation phase, before the code is executed.This allows these elements to be used before their actual declaration appears in the code. 
+
+          'use strict'
+          // normal function
+          // this works in normal function
+          const birthYear = 2000
+          console.log(`Before declaration: I'm born in ${birthYear}, & my current age is ${calcAge1(birthYear)}`);
+          function calcAge1(birthYear) {
+               return 2025 - birthYear;
+          }
+          console.log(`After: I'm born in ${birthYear}, & my current age is ${calcAge1(birthYear)}`);
+
+          // function expression
+          // this won't work in function expression, calling before declaration
+          // console.log(`Before: I'm born in ${birthYear}, & my current age is ${calcAge3(birthYear)}`);
+          // this is anonymous function
+          const calcAge3 = function (birthYear) {
+               return 2040 - birthYear;
+          }
+          console.log(`After: I'm born in ${birthYear}, & my current age is ${calcAge3(birthYear)}`);
+
+
+          // arrow function
+          // this won't work in arrow function, calling before declaration
+          // console.log(`Before: I'm born in ${birthYear}, & my current age is ${calcAge2(birthYear)}`);
+          const calcAge2 = birthYear => 2030 - birthYear;
+          console.log(`After: I'm born in ${birthYear}, & my current age is ${calcAge2(birthYear)}`);
+
+          // not allowed access before initialization
+          // console.log(calcAge4('sdfwe', 25));       // not allowed when its declared with const or let
+          const calcAge4 = (name, birthYear) => {
+               return `My name is ${name}, & my age is ${2025 - birthYear}`;
+          }
+
+          console.log(calcAge4('Vivek', 2000))         // My name is Vivek, & my age is 25
+          console.log(calcAge4('Mahesh', 1975))        // My name is Mahesh, & my age is 50
+
+
+          // if its var & just calling the name then it gives undefined as result
+          console.log(calling);              // UNDEFINED
+          var calling = 'Vivek';
+          console.log(calling);              // Vivek
+
+          // or in-case of function
+          console.log(calling2);                  // UNDEFINED
+          // console.log(calling2('werwe', 89));                  // this will throw error we can't call function before initialization
+          var calling2 = (name, birthYear) => {
+               return `FROM VAR CALLING:My name is ${name}, & my age is ${2025 - birthYear}`;
+          }
+          console.log(calling2('Vivek', 2000));                                                // FROM VAR CALLING:My name is Vivek, & my age is 25
+
+     - function calling another function:
+     eg.1.
+          const cutIntoPieces = fruit => fruit * 4;
+          
+
+          function JuiceMaker(fruit1, fruit2) {
+          const pieces1 = cutIntoPieces(fruit1);
+          const pieces2 = cutIntoPieces(fruit2);
+          return `Making a Juice with ${pieces1} pieces of Apples and ${pieces2} pieces of Orange`;
+          }
+
+          console.log(JuiceMaker(5, 10));    // Making a Juice with 20 pieces of Apples and 40 pieces of Orange
+     Test:
+          const calcAverage = (a, b, c) => (a+b+c)/3;
+          const scoreDolphins = calcAverage(44, 23, 71);
+          const scoreKoalas = calcAverage(65, 54, 49);
+          const checkWinner = (avgDolphins, avgKoalas) => {
+               if(avgDolphins >= avgKoalas * 2) console.log("D");
+               else if(avgDolphins * 2 <= avgKoalas) console.log("K");
+               else console.log("No team wins...");
+          }
+          checkWinner(scoreDolphins, scoreKoalas);
+
+Array:
+     const frnd1 = 'v1';
+     const frnd2 = 'v2';
+     const frnd3 = 'v3';
+     const frnds = ['v1', 'v2', 'v3'];
+     console.log(frnds);
+     const years = new Array(1991, 1987, 2000, 2004, 2012, 2025);
+     console.log(years);
+
+     console.log(frnds[0]);
+     console.log(frnds[2]);
+     console.log(years[1]);
+     console.log(years[2]);
+
+     console.log("no.of frnds ",frnds.length);
+     console.log("year count ", years.length);
+
+     // accessing last element
+     console.log(years[years.length - 1]);
+
+     // it worked, but it shouldn't coz frnds array we declared as const.
+     frnds[2] = 'new friend';
+
+     // then how its changed
+     // REASON IS: only primitive types are immutable means can't be changed (string, number, boolean, undefined, null, symbol, BigInt)
+     // array is not primitive datatype in javascript, so it changed its value
+     console.log(frnds);
+
+     // changing whole array is not allowed
+     // frnds = ['asdf', 'wer'];  
+
+     const myName = "Vivek"
+     const vivek = ['vi', 'nikate', 2025 - 2000, myName, frnds, true, false, undefined, null, NaN];
+     console.log(vivek);
+
+     const birthYears = [2000, 2001, 2002, 2003, 2004, 2005, 2006];
+     // just added 10 at the end of birthYears array
+     console.log(birthYears + 10); //  2000,2001,2002,2003,2004,2005,200610
+
+     console.log(birthYears - 10); // NaN
+
+     const calcAge = birthYear => 2025 - birthYear;
+     console.log(`My birthYear is ${birthYears[0]} & Age:`, calcAge(birthYears[0]));
+     console.log(`My birthYear is ${birthYears[1]} & Age:`, calcAge(birthYears[1]));
+     console.log(`My birthYear is ${birthYears[3]} & Age:`, calcAge(birthYears[3]));    
+
+Array methods:
+     // inserting at the end
+     const arr = [1, 2, 3, 'rwer'];
+     console.log(arr);
+     arr.push(24);
+     console.log(arr);
+     const len = arr.push(arr);
+     console.log('len is ', len, arr);
+
+     // inserting at the beginning, these methods returns the length new array formed
+     const len1 = arr.unshift('Vivek');
+     console.log('len is: ', len1, arr);
+
+     // removing elements, it returns the removed element
+     // from end
+     const popped1 = arr.pop();
+     const popped2 = arr.pop();
+     console.log('popped 1: ', popped1, 'popped2: ', popped2);
+     console.log(arr);
+
+     // from beginning
+     const popped3 = arr.shift();
+     const popped4 = arr.shift();
+     console.log('from beginning ', popped3);
+     console.log('from beginning ', popped4);
+     console.log(arr);
+
+     console.log('is exist at: ', arr.indexOf(2));
+     console.log('-1 if not exist: ', arr.indexOf(200));
+     console.log('is exist at: ', arr.indexOf('rwer'));
+     console.log('is exist at: ', arr.indexOf('rWer')); // case-sensitive
+
+     // includes, uses strict equality check
+     console.log('2', arr.includes(2)); // true
+     console.log("'2'", arr.includes('2')); // true
+     console.log('200', arr.includes(200)); // false
+     console.log('rwer', arr.includes('rwer')); // true
+     console.log('rWer', arr.includes('rWer')); // false case sensitive
+     console.log('rwe', arr.includes('rwe')); // false
+Test:
+     const calcTip = billValue => (billValue >= 50 && billValue <= 300) ? billValue * 0.15 : billValue * 0.2;
+     const bills = [125, 555, 44];
+     const tips = [calcTip(bills[0]), calcTip(bills[1]), calcTip(bills[2])]
+     const totals = [bills[0]+tips[0], bills[1]+tips[1], bills[2]+tips[2]];
+
+Intro to Object:
+     const v = ['Vivek', 'Nikate', ['A', 'B', 'C'], 25];
+     const Person = {
+          firstName: 'Vivek',
+          lastName: 'Nikate',
+          friends: ['A', 'B', 'C'],
+          age: 25,
+     };
+
+     console.log(v);
+     console.log(Person);
+
+     console.log(Person.lastName);
+     console.log(Person['lastName']);
+     const nameKey = 'Name';
+     console.log(Person['first' + nameKey]);
+     console.log(Person['last' + nameKey]);
+
+     // not work
+     // console.log(Person.'last' + nameKey);
+
+     // undefined
+     console.log(Person.crush);
+     console.log(Person['crush']);
+     const interested = prompt('what you want to know, type firstName, lastName, age, friends.');
+     console.log(Person.interested);           // not works
+     console.log(Person[interested]);
+     Person[interested] ? console.log(Person[interested]) : console.log("wrong, type firstName, lastName, age or friends");
+
+     // adding properties to object
+     Person.job = 'Software Engineer';
+     Person['hobby'] = ['Coding', 'Playing Games', 'Listening songs'];
+
+     console.log(Person);
+     console.log(`${Person.firstName} has ${Person.friends.length} friends and ${Person.friends[0]} is his BEST friend.`)
+
+Object methods:
+     - Any function is attached to object is called method.
+     eg. in below object juice, calcAge & process are identified as methods of object Person
+     const Person = {
+          firstName: 'Vivek',
+          lastName: 'Nikate',
+          profession: 'Software Engineer',
+          hasDriversLicense: true,
+          friends: ['A', 'B', 'C'],
+          age: 25,
+          birthYear: 2000,
+          calcAge: (currentYear) => currentYear - 2000,
+          // reading birth year internally, arrow function doesn't support this keyword
+          // calcAge4: () => new Date().getFullYear() - this.birthYear,
+
+          // this voilets the DRY principle as we are using object name directly in below line, what if we change the object name later
+          // in that case we have to come here & change the object name, so its better to use this keyword
+          calcAge3: () => new Date().getFullYear() - Person.birthYear,
+          calcAge2: function() {
+               return new Date().getFullYear() - this.birthYear;
+          },
+          juice: function(){
+                    console.log(this);         // this will print the cur object
+                    return 'making juice';
+               },
+          process: (p1, p2, p3) => {
+               return `working on ${p1} first, then ${p2} & then ${p3}`;
+          },
+          // this will save re-computations & time
+          calcNewAge: function () {
+               this.myNewAge = 2030 - 2000;
+               return this.myNewAge;
+          },
+          // calling calcNewAge function instead of using myNewAge directly
+          // there might be a case where getSummary function got called before creating myNewAge property of object.
+          // so better to call function instead of using undefined property.
+          getSummary: function(){
+               return `${this.firstName} is a ${this.calcNewAge()}-year old ${this.profession}, and he has ${this.hasDriversLicense ? 'a' : 'not'} driver license`;
+          },
+     };
+
+     console.log(Person.firstName);
+     console.log(Person.calcAge(2025));
+     console.log("using bracket ", Person['calcAge'](2025));
+
+     console.log(Person.calcAge2());
+     console.log("using bracket calcAge2 this: ", Person['calcAge2']());
+
+
+     console.log(Person.calcAge3());
+     console.log("using bracket calcAge3 this: ", Person['calcAge3']());
+
+     console.log(Person.juice());
+     console.log("using bracket ", Person['juice']());
+
+     console.log(Person.process(1,2,3));
+     console.log("using bracket ", Person['process'](1,2,3));
+
+     console.log(Person.calcNewAge());
+     console.log("using bracket new Age: ", Person['calcNewAge']());
+
+     // now directly accessing new age, withou    t computing again
+     console.log(Person.myNewAge);
+     console.log(Person.myNewAge);
+     console.log(Person.myNewAge);
+     console.log(Person.myNewAge);
+
+     console.log(`${Person.firstName} is a ${Person.myNewAge}-year old ${Person.profession}, and he has ${Person.hasDriversLicense ? 'a' : 'not'} driver license`)
+
+     console.log("from object Using bracket ",Person['getSummary']());
+     console.log(Person.getSummary());
+
+     TEST:
+          const mark = {
+               fullName: 'Mark Miller',
+               mass: 78,
+               height: 1.69,
+               calcBMI: function () {
+                    this.bmi = this.mass / (this.height * this.height);
+                    return this.bmi;
+               },
+          }
+
+          const john = {
+               fullName: 'Mark Miller',
+               mass: 92,
+               height: 1.95,
+               calcBMI: function () {
+                    this.bmi = this.mass / (this.height * this.height);
+                    return this.bmi;
+               },
+          }
+          const v1 = john.calcBMI(), v2 = mark.calcBMI();
+          const johnGreater = v1 > v2;
+          // console.log(`${johnGreater ? 'John Smith' : 'Mark Miller'}'s BMI (${johnGreater ? v1 : v2}) is higher than ${johnGreater ? 'Mark Miller' : 'John Smith'}'s (${johnGreater ? v2 : v1})!`);
+          if(!johnGreater)
+          console.log(`${mark.fullName}'s BMI (${mark.bmi}) is higher than ${john.fullName}'s (${john.bmi})!`)
+          else if(johnGreater)
+          console.log(`${john.fullName}'s BMI (${john.bmi}) is higher than ${mark.fullName}'s (${mark.bmi})!`)
+     
+Loops:
+     for(let i=0; i<10; i++)
+          console.log("rep ", i);
+     
+     array:
+     for(let i=0; i<vivek.length; i++)
+          console.log(vivek[i]);
+
+     // what if not assigned:
+          const a = [];
+          for(let i=0; i<20; i+=2)
+               a[i] = i;
+
+          console.log(a.length);        // 19
+          for(let i=0; i<30; i++)       // value which is exist shows else says undefined
+               console.log(a[i]);
+          
+     // size:
+          const a = [];
+          a[0] = 78;
+          a[100] = 78;
+
+          console.log(a.length);        // size is index of last element + 1
+          for(let i=0; i<a.length; i++)       // value which is exist shows else says undefined
+               console.log(a[i]);
+
+Continue & break:
+     const a = [];
+     for(let i=0; i<10; i++)
+          a.push(i);
+     
+     for(let i=0; i<10; i++){
+          if(i % 4 !== 0) continue;                      // if divisible by 4
+          console.log(a[i]);
+     }
+
+     console.log('----------------')
+     for(let i=1; i<10; i++){
+          console.log(a[i]);
+          if(i % 4 === 0) break;                      // found first Number divisible by 4
+     }
+
+Traverser array in reverse:
+     for(let i=a.length-1; i>=0; i--)
+          console.log(a[i]);
+
+Nested Loops:
+     for(let i=a.length-1; i>=0; i--){
+          // print each num 3 times
+          for(let j=0; j<3; j++)
+               console.log(a[i]);
+          console.log('-----');
+     }
+
+- While loop: use while loop instead of for loop when we don't know the ending condition or the number of iterations or we need to keep
+  looping until a certain condition is met
+     let dice = Math.ceil(Math.random() * 10);
+     while(dice !== 10){
+          dice = Math.ceil(Math.random() * 10);  
+          console.log(dice);
+     }
+
+     let i=0;
+     while(i < 10)
+          console.log(a[i++]);
+
+TEST:
+     const calcTip = function (bill) {
+          return bill >= 50 && bill <= 300 ? bill * 0.15 : bill * 0.2;
+     }
+
+     const bills = [22, 295, 176, 440, 37, 105, 10, 1100, 86, 52];
+     const tips=[], totals = [];
+
+     for(let i=0; i<bills.length; i++){
+          tips.push(calcTip(bills[i]));
+          totals.push(bills[i] + tips[i]);
+     }
+
+     const calcAverage = function(arr){
+          let s=0;
+          for(let i=0; i<arr.length; i++)
+               s += arr[i];
+          return s/arr.length;
+     }
+
+     console.log(calcAverage(totals));
+==============================================================================================================================
+Sec-4: Navigate Course:
+==============================================================================================================================
+Sec-5: Dev Skills & Editor setup:
+==============================================================================================================================
+Sec-6: HTML & CSS crash course:
+==============================================================================================================================
+Sec-7: DOM & Events:
+==============================================================================================================================
+Sec-8
+==============================================================================================================================
