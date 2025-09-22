@@ -800,6 +800,88 @@ Sec-5: Dev Skills & Editor setup:
 Sec-6: HTML & CSS crash course:
 ==============================================================================================================================
 Sec-7: DOM & Events:
+     num guess:
+          'use strict';
+          let secret = Math.ceil(Math.random() * 20);
+          console.log(secret);
+          let score = 20, highScore = 0;
+
+          document.querySelector('.score').textContent = score;
+          document.querySelector('.check').addEventListener('click', () => {
+               const guess = Number(document.querySelector('.guess').value);
+               if (!guess) {
+                    document.querySelector('.message').textContent = '⛔ No Number';
+               } else if (guess === secret) {
+                    document.querySelector('.message').textContent = '🎉 Correct Number!';
+                    document.querySelector('body').style.backgroundColor = '#6ac050ff';
+                    document.querySelector('.number').textContent = secret;
+                    if (highScore < score) {
+                         highScore = score
+                         document.querySelector('.highscore').textContent = score;
+                    }
+               } else {
+                    score--;
+                    document.querySelector('.score').textContent = score;
+                    if (score <= 0) {
+                         document.querySelector('.message').textContent = '💥 You lost the game, Please re-start the game';
+                         document.querySelector('.check').disabled = true;
+                    } else {
+                         if (guess < secret) {
+                              document.querySelector('.message').textContent = '📉 Too Low';
+                         } else {
+                              document.querySelector('.message').textContent = '📈 Too High';
+                         }
+                    }
+               }
+          })
+
+          document.querySelector('.again').addEventListener('click', () => {
+               score = 20;
+               secret = Math.ceil(Math.random() * 20);
+               // console.log('serect ', secret);
+               document.querySelector('.message').textContent = 'Start guessing...';
+               document.querySelector('.number').textContent = '?'
+               document.querySelector('.score').textContent = score;
+               document.querySelector('.guess').value = '';
+               document.querySelector('body').style.backgroundColor = '#222';
+               document.querySelector('.check').disabled = false;
+          })
+
+          // document.querySelector('.my-btn').addEventListener('keyup', () => {
+          //      alert('you Clicked key released the button');
+          // });
+
+          // document.querySelector('.my-btn').addEventListener('dblclick', () => {
+          //      alert('you Dbouble clicked the button');
+          // });
+
+          // document.querySelector('.my-btn').addEventListener('keydown', (e) => {
+          //      console.log(e.key);
+          //      if (e.key === 'a')
+          //           alert('you pressed a key button');
+          // });
+
+     modal:
+          'use strict';
+
+          const btnsOpenModal = document.querySelectorAll('.show-modal');
+          const overLay = document.querySelector('.overlay');
+          const model = document.querySelector('.modal');
+
+          const openModel = () => {
+               model.classList.remove('hidden');
+               overLay.classList.remove('hidden');
+          }
+          const closeModal = () => {
+               model.classList.add('hidden');
+               overLay.classList.add('hidden');
+          }
+
+          for (let i = 0; i < btnsOpenModal.length; i++)
+               btnsOpenModal[i].addEventListener('click', openModel)
+
+          document.querySelector('.close-modal').addEventListener('click', closeModal)
+          overLay.addEventListener('click', closeModal)
 ==============================================================================================================================
 Sec-8
 ==============================================================================================================================
