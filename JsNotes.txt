@@ -882,6 +882,448 @@ Sec-7: DOM & Events:
 
           document.querySelector('.close-modal').addEventListener('click', closeModal)
           overLay.addEventListener('click', closeModal)
+
+     pig game:
+          'use strict';
+          const player1Score = document.querySelector('#score--0');
+          const player2Score = document.getElementById('score--1');             // getElementById is little bit faster than querySelector
+          const dice = document.querySelector('.dice');
+
+          let currentScore0 = document.querySelector('#current--0');
+          let currentScore1 = document.querySelector('#current--1');
+
+          dice.classList.add('hidden');
+          const roller = document.querySelector('.btn--roll');
+
+          document.querySelector('.player--0').classList.add('player--active');
+          // if 1 then player 1 else player 2
+          let activePlayer = 1;
+
+          let player1ActualScore = 0;
+          let player2ActualScore = 0;
+
+          let player1CurrentScore = 0;
+          let player2CurrentScore = 0;
+
+          player1Score.textContent = player1ActualScore;
+          player2Score.textContent = player2ActualScore;
+
+          roller.addEventListener('click', () => {
+               const diceRoll = Math.ceil(Math.random() * 6);
+               dice.src = `dice-${diceRoll}.png`;
+               if (diceRoll === 1) {
+                    activePlayer = !activePlayer;
+                    alterActivePlayer(activePlayer);
+                    player1CurrentScore = player2CurrentScore = 0;
+                    currentScore0.textContent = currentScore1.textContent = 0;
+               } else {
+                    if (activePlayer) {
+                         player1CurrentScore += diceRoll;
+                         currentScore0.textContent = player1CurrentScore;
+                    } else {
+                         player2CurrentScore += diceRoll;
+                         currentScore1.textContent = player2CurrentScore;
+                    }
+               }
+               dice.classList.remove('hidden');
+          })
+
+          document.querySelector('.btn--new').addEventListener('click', () => {
+               player2CurrentScore = player1CurrentScore = player2ActualScore = player1ActualScore = 0;
+               player1Score.textContent = player2Score.textContent = currentScore0.textContent = currentScore1.textContent = 0;
+               document.querySelector('.player--0').classList.remove('player--winner');
+               document.querySelector('.player--1').classList.remove('player--winner');
+               activePlayer = 1;
+               roller.style.display = 'block';
+               alterActivePlayer(activePlayer)
+               document.querySelector('.btn--hold').style.display = 'block'
+          })
+
+          function alterActivePlayer(activePlayer) {
+               if (activePlayer) {
+                    document.querySelector('.player--0').classList.add('player--active');
+                    document.querySelector('.player--1').classList.remove('player--active');
+                    // document.querySelector('.player--0').classList.toggle('player--active');
+                    // document.querySelector('.player--1').classList.toggle('player--active');
+               } else {
+                    document.querySelector('.player--1').classList.add('player--active');
+                    document.querySelector('.player--0').classList.remove('player--active');
+               }
+          }
+
+          // setting winner's styles & corresponding settings
+          function setWinner(player) {
+               document.querySelector(`.player--${player}`).classList.add('player--winner');
+               roller.style.display = 'none';
+               const currentScore = document.querySelector(`#current--${player}`);
+               currentScore.textContent = "WON"
+               dice.style.display = 'none';
+               document.querySelector('.player--0').classList.remove('player--active');
+               document.querySelector('.player--1').classList.remove('player--active');
+               document.querySelector('.btn--hold').style.display = 'none';
+          }
+
+          document.querySelector('.btn--hold').addEventListener('click', () => {
+               activePlayer = !activePlayer;
+               alterActivePlayer(activePlayer);
+               player1ActualScore += player1CurrentScore;
+               player2ActualScore += player2CurrentScore;
+
+               player1Score.textContent = player1ActualScore;
+               player2Score.textContent = player2ActualScore;
+               player1CurrentScore = player2CurrentScore = 0;
+               currentScore0.textContent = currentScore1.textContent = 0;
+               if (player1ActualScore >= 100) {
+                    setWinner(0)
+                    return;
+               }
+               if (player2ActualScore >= 100) {
+                    setWinner(1);
+                    return;
+               }
+          })
 ==============================================================================================================================
-Sec-8
+Sec-8: How JS works behind the scenes:
+     - let, const are blocked scoped, but var is function scoped.
+     - the function are also the block scope, means accessible only within the block where its delcared, but only when we are using 'use strict' mode
+     - if we don't use 'use strict' then function can accessible outside the block.
+     - Hoisting:
+          // declaration can be accessible
+          console.log(add(10,20));
+
+          // expression are not accessible before initialization
+          // console.log(addExp(20,30));
+
+          // function declaration
+          function add(a,b){
+          return a+b;
+          }
+
+          // function expression
+          const addExp = function (a,b) {
+          return a+b;
+          }
+
+          // allowed here
+          console.log(addExp(20,30));
+
+          // console.log(addArrow(1,1));
+
+          // arrow function
+          const addArrow = (a,b) => a+b;
+          console.log(addArrow(1,1));
+     
+     - variable declared with var will create a property on global window object
+     eg.
+          var x = 10;
+          const y = 20;
+          let z = 70;
+          console.log(x === window.x);       // true
+          console.log(y === window.y);       // false
+          console.log(z === window.z);       // false
+
+     - This keyword points to the owner of the function.
+     - eg.
+          'use strict'
+          console.log(this);           // window object
+
+          const calc1 = function(year) {
+               console.log(year);
+               console.log("expression: ", this);           // undefined inside function expression, but if you dont use 'use strict' then this also will be window object.
+          }
+
+          const calc2 = year => {
+               console.log(year);
+               console.log("arrow function ", this);           // window object inside arrow function. arrow function doesnt have its own this keyword
+          }
+
+          calc1(2000)
+          calc2(2001)
+     
+     - you should never ever use arrow function as method.
+     - inside object if you want to create a function the always use anonymous/ function expression syntax. don't use arrow
+          eg.
+               myfn: function(){
+                    // statements
+               }
+
+               'use strict'
+               const Vivek = {
+                    year: 2000,
+                    calcAge: function (){
+                         console.log(this);
+                         console.log(this.year);
+                         
+                         // Solution-1: save data of this keyword
+                         const self = this;
+                         const f1 = function(){
+                              console.log('insdie f1: ', this);         // this is undefined, as its normal function body can be outside of Object, so this keyword doesn't exist
+                              console.log('insdie f1 self saving this data: ', self, self.year);
+                         }
+                         f1();
+
+                         // Solution-2: use arrow function, when need of nested functions. as arrow function don't get its own this keyword, it uses its parents this.
+                         const f2 = () => {
+                              console.log("f2: ",this);
+                              console.log("f2 year: ",this.year);
+                         }
+                         f2();
+                    }
+               }
+
+               Vivek.calcAge();
+
+               const mahesh = {
+                    year:1971
+               };
+
+               // method borrowing
+               mahesh.calcAge = Vivek.calcAge;
+               console.log(mahesh);
+               mahesh.calcAge();          // mahesh Object
+
+               const myFunc = Vivek.calcAge;
+               console.log(myFunc);
+               // myFunc();                // always use 'use strict' mode else the result will be different
+
+     - arguments keyword:
+          - arguments keyword only available in regular functions.
+          // regular function has access to arguments keyword
+          const add = function(a, b) {
+               console.log(arguments);
+               return a+b;
+          }
+
+          console.log(add(4,5));
+          add(7,8,9,4,5,6);
+
+          // arrow function doesn't have access to arguments keyword
+          const add2 = (a,b) => {
+               // console.log(arguments);          // not exist
+               return a+b;
+          }
+          add2(2,3);
+
+     - Shallow & Deep copy:
+          'use strict'
+          const jess = {
+          firstNmae: 'jess',
+          lastName: 'Will',
+          age: 20
+          };
+
+          const marriedJess = jess;
+          marriedJess.lastName = 'David'
+          console.log("Before: ", jess);
+          // {
+          //     "firstNmae": "jess",
+          //     "lastName": "David",
+          //     "age": 20
+          // }
+          console.log("After: ", marriedJess);
+          // {
+          //     "firstNmae": "jess",
+          //     "lastName": "David",
+          //     "age": 20
+          // }
+
+          // in function when we pass the object, we are not passing their copy or value, we are passing the reference of that object
+
+          // copy of original object
+          const Vivek = {
+          firstNmae: 'Vivek',
+          lastName: 'Nikate',
+          age: 25,
+          friends: ['a','b','c'],
+          family: ['x','y','z','p','q','r','s','t']
+          };
+
+          // spread-operator, copy of Vivek
+          // this is shallow copy, only first level copy, only create a copy of current object not for nested object
+          const cloneViv = {...Vivek};
+          console.log("Vivek ", Vivek);
+          console.log("cloned ", cloneViv);
+          console.log("Vivek friends ", Vivek.friends);
+
+          console.log("cloned friends Before", cloneViv.friends);
+          // cloneViv.friends = [1,2,3,4,5,6];
+          cloneViv.friends.push('Virus');
+          // both are same
+          console.log("cloned friends After", cloneViv.friends);
+          console.log("Vivek ", Vivek.friends);
+
+          // deep copy or deep clone
+          const deepClone = structuredClone(Vivek);
+          deepClone.friends.push(7,8,9,6,45);
+          console.log(Vivek);
+          console.log(deepClone);
+==============================================================================================================================
+Section 9: Data Structures, Modern Operators and Strings:
+     - Destructuring arrays:
+          - to destructure array we use [] syntax
+          const arr = [2,3,4];
+          const a = arr[0];
+          const b = arr[1];
+          const c = arr[2];
+
+          console.log(a,b,c);
+          // destructuring
+          const [z,x,y] = arr;
+          console.log(z,x,y);
+
+
+          // Data needed for first part of the section
+          const restaurant = {
+               name: 'Classico Italiano',
+               location: 'Via Angelo Tavanti 23, Firenze, Italy',
+               categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+               starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+               mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+
+               order: function(startIndx, mainIndx){
+                    return [this.starterMenu[startIndx], this.mainMenu[mainIndx]];
+               },
+               
+               openingHours: {
+                    thu: {
+                         open: 12,
+                         close: 22,
+                    },
+                    fri: {
+                         open: 11,
+                         close: 23,
+                    },
+                    sat: {
+                         open: 0, // Open 24 hours
+                         close: 24,
+                    },
+               },
+          };
+
+          // first 2 elements of array
+          const [first, second] = restaurant.categories;
+          console.log(first, second);          // Italian Pizzeria
+
+          // first and 3rd element, if crossing the range then it will be undefined
+          const [first1 ,, third ,, unexpected] = restaurant.categories;
+          console.log(first1, third, unexpected);     // Italian Vegetarian undefined
+
+          let [start, main] = restaurant.order(0,1);
+          console.log(start, main);
+
+          // swapping
+          let p = 20, q = 30;
+          console.log(p,q);
+          [p,q] = [q,p];
+          console.log(p,q);
+
+          // or
+          const temp = p;
+          p = q;
+          q = temp;
+          console.log(p,q);
+
+          const nested = [2,3,4, [5,6,7]];
+          const [i,,,j] = nested;
+          console.log(i, j);
+
+          // nested destructuring
+          const [i1,,,[j1,,k1]] = nested;
+          console.log(i1, j1, k1);
+
+          // default value
+          const [i2=1, j2=90, k2=78] = [10, 11];
+          console.log(i2, j2, k2);
+     
+     - Destructuring Objects:
+          we use {} syntax
+          // Data needed for first part of the section
+          const restaurant = {
+               name: 'Classico Italiano',
+               location: 'Via Angelo Tavanti 23, Firenze, Italy',
+               categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+               starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+               mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+
+               openingHours: {
+                    thu: {
+                         open: 12,
+                         close: 22,
+                    },
+                    fri: {
+                         open: 11,
+                         close: 23,
+                    },
+                    sat: {
+                         open: 0, // Open 24 hours
+                         close: 24,
+                    },
+               },
+          };
+
+          // object destructuring, order/sequence doesn't matter
+          const { name, openingHours, categories } = restaurant;
+          console.log(name, openingHours, categories);
+
+          // renaming properties
+          const { name: restoName, openingHours: Hours, location: Branches } = restaurant;
+          console.log(restoName, Hours, Branches);
+
+          // default values for properties & renaming
+          const { menu = [], menu2, starterMenu: InitialMenu = [] } = restaurant;
+          console.log('menu: ', menu, 'menu2: ', menu2, InitialMenu);
+
+          let a = 400,
+          b = 500;
+          const obj = { a: 1, b: 2, c: 3 };
+          console.log(a, b);
+          // destructuring already existed values
+          // let {a:z, b:x} = obj;     // this works
+          // console.log(z,x);
+          // or
+          ({ a, b } = obj);
+          console.log(a, b);
+          
+          // nested objects
+          const {sat} = openingHours;
+          console.log(sat);
+
+          const {sat: {open, close}} = openingHours
+          console.log(open, close);
+
+          // renaming
+          const {sat: {open: o, close: c}} = openingHours
+          console.log(o, c);
+
+          // all good values
+          restaurant.orderDelivery({
+               time:'22:30',
+               address: 'India, Maharashtra, Solapur',
+               mainIndex:2,
+               startIndex:2,
+          })
+
+          // indexes are out of range
+          restaurant.orderDelivery({
+               time:'22:30',
+               address: 'India, Maharashtra, Solapur',
+               mainIndex:12,
+               startIndex:21,
+          })
+
+          // invalid parameter passing
+          restaurant.orderDelivery({});
+
+     - spread Operator:
+          
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
+==============================================================================================================================
 ==============================================================================================================================
