@@ -1315,6 +1315,594 @@ Section 9: Data Structures, Modern Operators and Strings:
           restaurant.orderDelivery({});
 
      - spread Operator:
+          const arr = [10, 2, 30];
+          const badArr = [1,23, arr[0], arr[1], arr[2]];
+          console.log(badArr);
+
+          // single array, spread operator
+          const newGoodArr = [1, 23, ...arr];
+
+          // nested array
+          const Arr2 = [1, 23, arr];
+
+          console.log(newGoodArr);
+          console.log(...newGoodArr);
+          console.log(1,23,10,2, 30);         // is same as ...newGoodArr content
+          console.log(Arr2);
+
+          // Data needed for first part of the section
+          const restaurant = {
+               name: 'Classico Italiano',
+               starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+               mainMenu: ['Pizza', 'Pasta', 'Risotto'],    
+          };
+
+          const newMenu = [...restaurant.mainMenu, 'Butter nan', 'paneer butter masala'];
+          console.log(newMenu);
+
+          // copy array
+          const mainMenuCopy = [...restaurant.mainMenu]; 
+          // const menu = [...mainMenuCopy, ...restaurant.starterMenu];
+          // or
+          const menu = mainMenuCopy.concat(restaurant.starterMenu);
+
+          menu.push('Extra masala');
+          console.log(mainMenuCopy);
+          console.log(restaurant.starterMenu);
+          console.log(menu);
+
+          // iterables: arrays, maps, strings, sets, NOT objects
+
+          // console.log(`${...menu} is menu`);   // ... won't work with template literal
+
+          // copy of object, shallow copy
+          const newRestaurant = {founded:1998, ...restaurant};
+          newRestaurant.name = 'Its new restaurant';
+          console.log(newRestaurant.name);
+          console.log(restaurant.name);
+
+          newRestaurant.mainMenu.push('new restaurant Item Bread');     // affects both new & old object
+          console.log(newRestaurant.mainMenu);
+          console.log(restaurant.mainMenu);
+
+     - rest parameter:
+          - rest parameter is same as spread operator (...)
+          - rest used on left hand side of =, where we give/ put variables names
+          - spread used on right hand side of =, where we give values or initialize the variables
+          eg.
+          const restaurant = {
+               name: 'Classico Italiano',
+               location: 'Via Angelo Tavanti 23, Firenze, Italy',
+               categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+               starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+               mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+
+               openingHours: {
+               thu: {
+                    open: 12,
+                    close: 22,
+               },
+               fri: {
+                    open: 11,
+                    close: 23,
+               },
+               sat: {
+                    open: 0, // Open 24 hours
+                    close: 24,
+               },
+               mon:{
+                    open: 0,
+                    close: 45,  // random
+               }
+               },
+
+               orderPizza: function(main, ...rest){
+               console.log(main);
+               console.log(rest);
+               }
+          };
+
+          const arr = [10, 2, 30, 89, 7, 56];
+          // there will be only one rest variable, must be at end of array
+          const [a, b, ...remaining] = arr;
+          console.log(a, b, remaining);
+
+          const [Pizza, , resotto, ...otherFoods] = [...restaurant.mainMenu, ...restaurant.starterMenu];
+          console.log(Pizza, resotto, otherFoods);
+
+          const {sat, ...weekdays} = restaurant.openingHours;
+          console.log(sat, weekdays);
+
+          const add = function(...nums){
+          let s=0;
+          for(let i=0; i<nums.length; i++)
+               s += nums[i];
+          return s;
+          }
+
+          console.log(add(1,2));
+          console.log(add(1,2,3,4));
+          console.log(add(1,2,5,6,7,8));
+
+          const x = [23,5, 6,7,78];
+          console.log(add(...x));
+
+          restaurant.orderPizza('my Main');
+          restaurant.orderPizza('my Main', 'second Item');
+
+     - short circuiting (&&, ||):
+          // || OR
+          // returns the first truthy value or if all false return the last value even if its false
+          console.log(2 || 'vivek')       // 2
+          console.log(true || 0);      // true
+          console.log(false || 0);   // 0
+          console.log(false || 0 || null);   // null
+          console.log(false || 0 || null || undefined);   // undefined
+          console.log(false || 'viv' || 'wer' || 'asdf');        // 'viv'
+          console.log(0 || undefined || null || '' || "" || -0 || NaN || 'rwe');       // rwe
+
+          const restaurant = {
+          guest: 45,
+          customers: 0,
+          orderPizza: function(){
+               console.log('ordering pizza');
+          },
+          };
+
+          console.log("guest ", restaurant.guest ? restaurant.guest : 10);
+          // instead of above
+          console.log("people ", restaurant.people || 10);
+
+          // with actual value 0, it should print 0, its not working
+          console.log("guest customers", restaurant.customers ? restaurant.customers : 10);
+          console.log("people customers", restaurant.customers || 10);
+
+
+          // AND &&
+          // returns first falsy value or if all are true then returns the last value even if its true
+          console.log(2 && 'vivek')       // vivek
+          console.log(true && 0);      // 0
+          console.log(false && 0);   // false
+          console.log(false && 0 && null);   // false
+          console.log(false && 0 && null && undefined);   // false
+          console.log(false && 'viv' && 'wer' && 'asdf');        // 'false'
+          console.log(0 && undefined && null && '' && "" && -0 && NaN && 'rwe');       // 0
+          console.log(-0 && undefined && null && '' && "" && 0 && NaN && 'rwe');       // -0
+          console.log('asdf' && true && 34 && undefined && null && '' && "" && 0 && NaN && 'rwe');       // undefined
+
+
+          // calling the function if they are exist
+          if(restaurant.orderKajuMasala)
+          restaurant.orderKajuMasala();
+          // instead of above
+          restaurant.orderKajuMasala && restaurant.orderKajuMasala();
+          restaurant.orderPizza && restaurant.orderPizza();
+
+     - Nullish Coalescing Operator (??):
+          const restaurant = {
+               guest: 45,
+               customers: 0,
+               customers2: -0,
+               orderPizza: function(){
+                    console.log('ordering pizza');
+               },
+          };
+
+          console.log("guest ", restaurant.guest ? restaurant.guest : 10);    // 45
+          // instead of above ?: (ternary operator)
+          console.log("people ", restaurant.people || 10);            // 10
+
+          // with actual value 0, it should print 0, its not working
+          console.log("guest customers", restaurant.customers ? restaurant.customers : 10);   // 10, but expected 0
+          console.log("people customers", restaurant.customers || 10);              //10, here also, expected is 0
+
+          // instead of || (OR) and ?: (ternary) operator Use Nullish coalescing operator ??
+          // 0 and '' (empty string) are truthy values for ??
+          console.log("guest ", restaurant.guest ?? 110);           // 45
+          console.log("people ", restaurant.people ?? 420);          // 420
+          console.log("customers ", restaurant.customers2 ?? 10);    // -0
+
+     - Logical Assignment operator:
+          const restaurant = {
+               guest: 45,
+               customers: 0,
+               customers2: -0,
+               customers3: false,
+               orderPizza: function(){
+                    console.log('ordering pizza');
+               },
+               owner: 'Vivek',
+          };
+          console.log(restaurant);
+          // restaurant.guest = restaurant.guest || 10;
+          // restaurant.customers = restaurant.customers || 420;
+          restaurant.guest ||= 10;
+          restaurant.customers ||= 420;         // expected 0 but getting 420
+          restaurant.customers3 ||= 90;         // expected false, getting 90
+          console.log(restaurant);
+
+          restaurant.customers3 = false;
+          // nullish coalescing operator ??, if value exist then prioritize the value else chooses default values
+          // restaurant.customers2 = restaurant.customers2 ?? 300;     // -0
+          restaurant.customers2 ??= 300;     // -0
+          restaurant.customers3 ??= 455;     // false
+
+          console.log("before ", {...restaurant})
+          restaurant.owner = restaurant.owner && 'Making it anonymous'
+          // instead
+          restaurant.owner2  &&= 'Dangerous'
+          console.log("After ", {...restaurant})
+
+     - TEST:
+          const game = {
+               team1: 'Bayern Munich',
+               team2: 'Borrussia Dortmund',
+               players: [
+               [
+                    'Neuer',
+                    'Pavard',
+                    'Martinez',
+                    'Alaba',
+                    'Davies',
+                    'Kimmich',
+                    'Goretzka',
+                    'Coman',
+                    'Muller',
+                    'Gnarby',
+                    'Lewandowski',
+               ],
+               [
+                    'Burki',
+                    'Schulz',
+                    'Hummels',
+                    'Akanji',
+                    'Hakimi',
+                    'Weigl',
+                    'Witsel',
+                    'Hazard',
+                    'Brandt',
+                    'Sancho',
+                    'Gotze',
+               ],
+               ],
+               score: '4:0',
+               scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+               date: 'Nov 9th, 2037',
+               odds: {
+               team1: 1.33,
+               x: 3.25,
+               team2: 6.5,
+               },
+          };
+
+          // 1.
+          const [players1, players2] = game.players;
+          console.log(players1, players2);
+
+          // 2.
+          const [goalKep1, ...fieldPlayers1] = players1;
+          const [goalKep2, ...fieldPlayers2] = players2;
+          console.log(goalKep1, goalKep2, fieldPlayers1, fieldPlayers2);
+
+          // 3.
+          // const allPlayers = [...players1, ...players2];
+          const allPlayers = players1.concat(players2);
+          console.log(allPlayers);
+
+          // 4.
+          const playersFinal = [...players1, 'Thiago', 'Coutinho', 'perisic'];
+          console.log(playersFinal);
+
+          // 5.
+          // const {team1, team2, x: draw} = game.odds
+          const {odds: {team1, team2, x: draw}} = game;
+
+          console.log(team1, team2, draw);
+
+          // 6.
+          const printGoals = (...playerNames) => {
+          let n = playerNames.length;
+          for(let i=0; i<n; i++)
+          console.log(playerNames[i], n);
+          }
+
+          printGoals(...players1);
+          printGoals('davies', 'muller','love','kim');
+          printGoals(...game.scored);
+
+          // 7. team with lower odds wins
+
+          console.log("team1 won? ", team1 < team2 || false);
+          // or
+          team1 < team2 && console.log("Team1 Won the match");
+          team2 < team1 && console.log("Team2 Won the match");
+
+     - for:
+          const game = {
+               players: [
+               [
+                    'Neuer',
+                    'Pavard',
+                    'Martinez',
+                    'Alaba',
+                    'Davies',
+                    'Kimmich',
+                    'Goretzka',
+                    'Coman',
+                    'Muller',
+                    'Gnarby',
+                    'Lewandowski',
+               ],
+               [
+                    'Burki',
+                    'Schulz',
+                    'Hummels',
+                    'Akanji',
+                    'Hakimi',
+                    'Weigl',
+                    'Witsel',
+                    'Hazard',
+                    'Brandt',
+                    'Sancho',
+                    'Gotze',
+               ],
+               ],
+          };
+
+          // for-of loop
+          const allPlayers = [...game.players[0], ...game.players[1]]
+          console.log(allPlayers);
+
+          for(const item of allPlayers)
+          console.log(item);
+
+          // with indexes
+          console.log(...allPlayers.entries());
+          console.log('....................')
+          for(const item of allPlayers.entries())
+          console.log(item);
+
+          for(const item of allPlayers.entries())
+          console.log(`${item[0]+1}: ${item[1]}`);
+
+          for(const [i, item] of allPlayers.entries())
+          console.log(`${i+1}: ${item}`);
+
+          console.log('forEach loop: ')
+          allPlayers.forEach((ele, indx)=>{
+               console.log(ele, indx);
+          })
+
+     - Enhanced Object literals:
+          const days = ['mon', 'tues', 'wed', 'sun', 'thu', 'fri', 'sat'];
+
+          const openingHours = {
+               // computing property names, always use [] inside that put dynamic name else throws error
+               [days[1]]:{
+                    open: 45,
+                    close: 45,
+               },
+               [days[0]]:{
+                    open: 45,
+                    close: 45,
+               },
+               [`day-${6+12}`]: {
+                    open: 45,
+                    close: 45,
+               },
+               thu: {
+                    open: 12,
+                    close: 22,
+               },
+               fri: {
+                    open: 11,
+                    close: 23,
+               },
+               sat: {
+                    open: 0, // Open 24 hours
+                    close: 24,
+               },
+          };
+
+          const newObje = {
+               id:1,
+               value:'string',
+          }
+
+          const restaurant = {
+               name: 'Classico Italiano',
+               location: 'Via Angelo Tavanti 23, Firenze, Italy',
+               categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+               starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+               mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+               // openingHours: openingHours,       // as it has same name so just mention once
+               openingHours,
+               // adding other newObje
+               newObje,
+               
+               // old way of func in object
+               orderPizaa1: function(){
+                    console.log('ordering pizza1..');
+                    return 1;
+               },
+               // new way func in object, without key name
+               orderPizaa2(){
+                    console.log('Ordering Pizza2');
+                    return 1;
+               },
+               orderPizaa3(n1, n2){
+                    console.log(`first ${n1}, second ${n2}`);
+                    return 1;      // just to make sure the method does exist
+               },
+          };
+          console.log(restaurant);
+          restaurant.orderPizaa1();
+          restaurant.orderPizaa2();
+          console.log(restaurant);
+          restaurant.orderPizaa1();
+          restaurant.orderPizaa2();
+
+     - Optional chaining (.?):
+          console.log(restaurant.openingHours.mon);
+
+          if(restaurant.openingHours.wed)
+               console.log('Opens at ', restaurant.openingHours.wed.open);
+
+          // instead
+          console.log(restaurant.openingHours.wed?.open ?? 'Closed on wednesday');
+
+          if(restaurant.openingHours.mon)
+               console.log('on Monday Opens at ', restaurant.openingHours.mon.open);
+
+          console.log(restaurant.openingHours.sun?.open ?? 'Closed on sunday');
+
+          // if restaurant object exist, then if openingHours exist then on sunday exist then show open value
+          // optional chaining
+          console.log(restaurant?.openingHours?.sun?.open ?? 'Closed on sunday');
+
+          days.forEach((day) =>{
+               const status = restaurant.openingHours?.[day] ? `on ${day} the restaurant opens at ${restaurant.openingHours[day].open}` : `The restaurant is closed on ${day}`
+               console.log(status);
+          })
+
+          restaurant.orderPizaa1() ?? 'orderPizaa1 method doesn\'t exist';
+          restaurant.orderPizaa3?.(45,89) ?? 'orderPizaa3 method doesn\'t exist';
+          restaurant.orderPizaa4?.(1,2) ?? 'orderPizaa4 method doesn\'t exist'
+
+          const users = [
+                         {
+                              userName: 'Vivek',
+                              email: 'viv@v.com',
+                         },
+                         {
+                              userName: 'mahesh',
+                              age: 45,
+                         },
+                    ];
+          console.log(users[0].userName)
+          console.log(users[0]?.age ?? 'Age doesn\'t exist');
+          console.log(users[1]?.age ?? 'Age doesn\'t exist');
+
+     - Looping Objects: keys, values, entries
+          // all keys of object
+          console.log(Object.keys(restaurant));
+
+          // all values of object
+          console.log(Object.values(restaurant));
+
+          // all data of object
+          console.log(Object.entries(restaurant));
+
+          // printing keys of object
+          for(const k of Object.keys(restaurant))
+               console.log(k);
+
+          // printing values of object
+          for(const v of Object.values(restaurant))
+               console.log(v);
+
+          // printing both keys & values of object
+          for(const [k, v] of Object.entries(restaurant))
+               console.log(k, v);
+
+     - Test:
+          // 1.
+          for(const [indx, ele] of game.scored.entries())
+               console.log(`${indx+1}: ${ele}`);
+
+          // 2. average odd
+          let avg = 0;
+          for(const val of Object.values(game.odds))
+               avg += val;
+
+          console.log(avg / Object.values(game.odds).length)
+
+          for(const [keys, values] of Object.entries(game.odds))
+               console.log(`Odd of ${keys === 'x' ? 'draw' : `victory ${game[keys]}`}: ${values}`)
+
+          const scorers = {};
+
+          for(const ele of game.scored)
+               // scorers[ele] = (scorers[ele] || 0) + 1;
+               scorers[ele] = (scorers[ele] ?? 0) + 1;
+               // scorers[ele] = (scorers?.[ele] ?? 0) + 1;
+          console.log(scorers);
+
+     - Sets:
+          - doesn't contain duplicates
+          const orderSet = new Set([5,4,3,2,1,5,4,3,2,1]);
+          console.log(orderSet)
+
+          console.log(new Set('vivek'));
+          console.log(orderSet.size);
+          console.log(orderSet.has(3));
+          console.log(orderSet.has(1));
+          console.log(orderSet.has(30))
+
+          orderSet.add(12);
+          orderSet.add('nikate');
+          orderSet.add('vivek');
+          console.log(orderSet);
+
+          console.log('5 exist in orderSet? ', orderSet.has(5));
+          orderSet.delete(5);
+          console.log('5 exist in orderSet? ', orderSet.has(5));
+
+          console.log('vivek exist in orderSet? ', orderSet.has('vivek'));
+          orderSet.delete('vivek');
+          console.log('vivek exist in orderSet? ', orderSet.has('vivek'));
+
+          // traversing
+          for(const item of orderSet)
+          console.log(item);
+
+          // clearing set
+          orderSet.clear();
+          console.log(orderSet);
+
+          const staff = [1,2,3,4,5,6,7,1,2,3,4,5,6,7];
+          const staffSet = new Set(staff);
+          console.log(staffSet);
+
+          const uniqStaffMem = [...staffSet];
+          console.log(uniqStaffMem);
+
+          const set1 = new Set([4,5,6,7,8,9]);
+          const set2 = new Set([1,2,3,4,5]);
+          const common = set1.intersection(set2)
+          console.log(common);
+          console.log(...common);      // array
+
+          // all elements without duplicates
+          const all = set1.union(set2);
+          console.log(all);
+
+          // unique in set1
+          const uniqSet1 = set1.difference(set2);
+          const uniqSet2 = set2.difference(set1);
+
+          console.log(uniqSet1); // 4,5 are repeated so excluded them.
+          console.log(uniqSet2); // 4,5 are repeated so excluded them.
+
+          // uniq foods from both set, excluding common
+          const allUniq1 = set1.symmetricDifference(set2);
+          const allUniq2 = set2.symmetricDifference(set1);
+          console.log(allUniq1, allUniq2);
+
+          // isDisjointFrom return true if both sets doesn't have any common elements
+          console.log(set1.isDisjointFrom(set2));     // false
+          console.log((new Set([4,5,6])).isDisjointFrom(new Set([1,2,3])));      // true
+
+          console.log((new Set([1,2,3,4])).isSubsetOf(new Set([1,2])));      // false
+          console.log((new Set([1,2])).isSubsetOf(new Set([1,2,3,4])));      // true
+
+          console.log((new Set([1,2,3,4])).isSupersetOf(new Set([1,2])));      // true
+          console.log((new Set([1,2])).isSupersetOf(new Set([1,2,3,4])));      // false
+
+     - Map:
+          
+
+
           
 ==============================================================================================================================
 ==============================================================================================================================
