@@ -1158,7 +1158,7 @@ Sec-8: How JS works behind the scenes:
           console.log(Vivek);
           console.log(deepClone);
 ==============================================================================================================================
-Section 9: Data Structures, Modern Operators and Strings:
+Sec-9: Data Structures, Modern Operators and Strings:
      - Destructuring arrays:
           - to destructure array we use [] syntax
           const arr = [2,3,4];
@@ -1417,7 +1417,7 @@ Section 9: Data Structures, Modern Operators and Strings:
           let s=0;
           for(let i=0; i<nums.length; i++)
                s += nums[i];
-          return s;
+               return s;
           }
 
           console.log(add(1,2));
@@ -1742,7 +1742,7 @@ Section 9: Data Structures, Modern Operators and Strings:
           restaurant.orderPizaa1();
           restaurant.orderPizaa2();
 
-     - Optional chaining (.?):
+     - Optional chaining (?.):
           console.log(restaurant.openingHours.mon);
 
           if(restaurant.openingHours.wed)
@@ -1900,11 +1900,639 @@ Section 9: Data Structures, Modern Operators and Strings:
           console.log((new Set([1,2])).isSupersetOf(new Set([1,2,3,4])));      // false
 
      - Map:
-          
+          const map = new Map(); // empty map
+          console.log(map);
+
+          // to insert the value into map set, as key & value
+          // key can be any data type & value also any type
+          map.set(1, 2);
+          map.set('vivek', 'Nikate');
+
+          // also we can chain the set methods one-after other
+          const arr = [1, 2];
+          map
+          .set([1, 2], 'Test Array')
+          .set(arr, 'Test array 2')
+          .set(true, 'Working')
+          .set(false, 'Not working')
+          .set('C', 'Its character')
+          .set(undefined, 'value is undefined')
+          .set(null, 'Value is null')
+          .set(arr, [4,5,6])
+          .set(56, 'Its 56')
+          .set(true, 22)
+          .set(true, 56)
+          .set('v', 'nik')                   // same key values will be overwritten
+          .set('v', 'n');
+          .set(document.querySelector('h1'), 'Heading');
+
+          // traversing map
+          for(const [i, val] of mp)
+               console.log(i, val);
+          for(const val of mp)
+               console.log(val);
+
+          console.log(map);
+          // retrive the value from map get
+          console.log(map.get(1));
+          console.log(map.get([1,2]));   // printing undefined, even [1,2] key exist in array, coz the array is object so the reference we are passing are different
+          console.log(map.get(arr));   // this works fine
+          console.log(map.get(false)); 
+          console.log(map.get(true));
+
+          console.log(map.get('c'));        // as keys are case-sensitive
+          console.log(map.get('C'));        // Its character
+          console.log(map.get(null));
+          console.log(map.get(undefined));
+
+          // to confirm the key exist in map has method
+          console.log('arr exist in map? ', map.has(arr));      // true
+          console.log('null exist in map? ', map.has(null));    // true
+          console.log('C exist in map? ', map.has('C'));        // true
+          console.log('true exist in map? ', map.has(true));        // true
+
+          console.log('89 exist in map? ', map.has(89));        // false
+          console.log('[1,2] exist in map? ', map.has([1,2]));        // false
+          console.log('op exist in map? ', map.has('op'));        // false
+
+          // to delete
+          console.log('56 exist in map? ', map.has(56));    // true
+          map.delete(56);
+          console.log('56 exist in map? ', map.has(56));    // false
+
+          // no.of element in map
+          console.log('element in maps: ', map.size);
+
+          // to clear map
+          map.clear();
+          console.log(map);
+
+          // Object to map
+          const game = {
+               one:'1',
+               two:'2',
+               three:'3',
+               four:'4',
+               five:'5'
+          };
+
+          console.log(game);
+          console.log('Got rating '+game.one);
+
+          const mp = new Map(Object.entries(game));
+          console.log(mp);
+          console.log('got rating of '+ mp.get('two'));
+
+          // initializing map with some pre-defined values
+          const mp = new Map([
+               [1, 'Option1'],
+               [2, 'Option2'],
+               [3, 'Option3'],
+               [4, 'Option4'],
+               [5, 'Option5'],
+               [6, 'Option6'],
+               [7, 'Option7'],
+               [true, 'Correct.!'],
+               [false, 'Try again.!']
+          ]);
+
+          console.log(mp);
+          const ans = 7;
+          const prom = 7; // Number(prompt('enter your ans'));
+          console.log(mp.get(prom === ans));
+
+          // map to array
+          console.log(mp);
+          const arr = [...mp];
+          console.log(arr);
+
+          // all keys, values & both of map, it gives iterator, so convert them into array
+          console.log(mp.keys());
+          console.log(mp.values());
+          console.log(mp.entries());
+
+          console.log(...mp.keys());
+          console.log(...mp.values());
+          console.log(...mp.entries());
+
+          // Frequency counter:
+               const arr = [1,2,3,4,5,1,2,3,4,5,1,2,3];
+               const mp = new Map();
+               for(const i of arr){
+               // console.log(mp.has(i));
+                    if(mp.has(i)){
+                         mp.set(i, mp.get(i)+1);
+                    }else{
+                         mp.set(i,1);
+                    }
+               }
+
+               console.log(mp);
+
+     - Object:
+          const ob = {
+               1:279,
+               2:3,
+               ser:78,
+               // 'ser': 79,                   // both will considered as same & the new coming value will gets returned here 79
+          };
+
+          // to access the 
+          console.log(ob['ser']);
+          console.log(ob.ser);
+          console.log(ob[1]);
+          console.log(ob[2]);            // to access the key of type num in object use this [] syntax
+
+     - Test:
+          const gameEvents = new Map([
+               [17, '⚽️ GOAL'],
+               [36, '🔁 Substitution'],
+               [47, '⚽️ GOAL'],
+               [61, '🔁 Substitution'],
+               [64, '🔶 Yellow card'],
+               [69, '🔴 Red card'],
+               [70, '🔁 Substitution'],
+               [72, '🔁 Substitution'],
+               [76, '⚽️ GOAL'],
+               [80, '⚽️ GOAL'],
+               [92, '🔶 Yellow card'],
+          ]);
+
+          // 1.
+          const arr = [...new Set([...gameEvents.values()])];
+          console.log(arr);
+
+     - Strings:
+          const str = 'This is a string';
+          console.log(str[0]);
+          console.log(str[2]);
+          console.log(str[3]);
+          console.log(str[6]);
+
+          console.log(str.length);
+          console.log('sadf'[2]);
+          console.log('sdfs'.length);
+
+          console.log('VivekNikate'.indexOf('v'));  // starting index of v
+          console.log('VivekNikavte'.lastIndexOf('v'));  // ending index of v
+
+          // occurrence
+          const s2 = 'VivekNikateEngineer';
+          console.log(s2.indexOf('nik'));  // -1, nik not exist case-sensitive
+          console.log(s2.indexOf('Nik'));  // 5
+
+          console.log(s2.slice(5));       // just mentioned starting index
+          console.log(s2.slice(5,9));       // starting & endig index, but the ending index is excluded 9-5 = 4 char will be there
+
+          console.log(str.slice(str.indexOf(' '), str.lastIndexOf(' ')));
+
+          const nameIndex = s2.indexOf('E');
+          console.log(s2.slice(0, nameIndex));
+
+          console.log(s2.slice(0));     // whole string
+          console.log(s2.slice(5));     // string starting from 5th index
+          console.log(s2.slice(0, -1));     // except the last char
+          console.log(s2.slice(0, -2));     // except the last 2 char
+          console.log(s2.slice(-1));     // accessing last char
+          console.log(s2.slice(-2,-1));     // accessing 2nd last char
+
+          // function which decides is middleSeat or not?
+          const isMiddleSeat = (seat) => {
+          // if seat's last char is B or E then its middle seat
+          const lastChar = seat.slice(-1);
+          return lastChar === 'E' || lastChar === 'B';
+          };
+
+          console.log('11B is middle seat? ', isMiddleSeat('11B'));        // true
+          console.log('12B is middle seat? ', isMiddleSeat('12B'));        // true
+          console.log('1E is middle seat? ', isMiddleSeat('1E'));          // true
+          console.log('2e is middle seat? ', isMiddleSeat('2e'));       // case-sensitive, false
+          console.log('11E is middle seat? ', isMiddleSeat('11E'));      // true
+          console.log('QZ is middle seat? ', isMiddleSeat('QZ'));        // false  
+          console.log('11Z is middle seat? ', isMiddleSeat('11Z'));      // false
+
+          console.log('S2 is: ', s2);
+          console.log('S2 with uppercase: ', s2.toUpperCase());
+          console.log('S2 with lowercase: ', s2.toLowerCase());
+          // the original string s2 stays the same
+          console.log('S2 is: ', s2);
+
+          // fix capitalization in names
+          const name = 'vIvEk niKATe';            // Vivek nikate
+          console.log(name.slice(0,1).toUpperCase() + name.slice(1).toLowerCase());       // Vivek nikate
+          console.log(name[0].toUpperCase() + name.slice(1).toLowerCase());          // Vivek nikate
+
+          const originalEmail = 'viveknikate.2000@gmail.com';
+          const missTypeEmail = '     VIVekNikAtE.2000@GMAil.COM    \n         ';
+
+          console.log(originalEmail);
+          console.log(missTypeEmail);
+          console.log(`Are missTypeEmail and originalEmail same? `, originalEmail == missTypeEmail)
+          // trime to remove white spaces & new lines (\n) from both ends
+          console.log(missTypeEmail.trim());
+
+          const modified = missTypeEmail.trim().toLowerCase();
+          console.log(`After Opertion \n Are missTypeEmail and originalEmail same? `, originalEmail === modified, modified);
+
+          const testStr1 = ' \n        vivek     \n           ';
+          console.log(testStr1);
+          // trimStart - remove white spaces from front
+          console.log(testStr1.trimStart());
+          // trimEnd - remove white spaces from back
+          console.log(testStr1.trimEnd());
+          // from both ends
+          console.log(testStr1.trim());
+
+          // replace part of string, only replaces the first occurrence. its case sensitive
+          const testStr2 = '1111,2222,3333,4444,pqrst';
+          console.log(testStr2);
+          console.log(testStr2.replace('1','first one '))
+          console.log(testStr2.replace('4',' its four '));
+          console.log(testStr2.replace('r','}'))
+          console.log(testStr2.replace('pqrst','string'));
+
+          const na = 'vivek'
+          console.log("Capitalization: ",na.replace(na[0], na[0].toUpperCase()))
+
+          // this won't work
+          console.log(testStr2.replace('P','z'));
 
 
-          
+          // replaceAll method will replaces all occurrences of string
+          console.log(testStr2.replaceAll('1','first one '))
+          console.log(testStr2.replaceAll('4',' [its four] '));
+          console.log(testStr2.replaceAll('r','}'));
+          console.log(testStr2.replaceAll('pqrst','string'));
+
+          // using Regular expression regex to replace the part of string
+          console.log("Using regex ",testStr2.replace(/1/g, ' [one] '));      // g stands for global all occurrences
+
+          const plane = 'A320neo';
+
+          // includes
+          console.log('is 320 included? ',plane.includes(320));      // true, whatever we pass in includes, it gets converted into string
+          console.log('is A32 included? ',plane.includes('A32'));    // true
+          console.log('is neo included? ',plane.includes('neo'));    // true
+          console.log('is neo included? ',plane.includes('neo1'));    // false
+          console.log('is neo included? ',plane.includes('neo1'));    // true
+
+          // startsWith
+          console.log('Start with a32 ', plane.startsWith('a32'));      // false, case-sensitive
+          console.log('Start with A32 ', plane.startsWith('A32'));      // true
+          console.log('Start with neo', plane.startsWith('neo'));      // false
+
+          // endsWith
+          console.log('Ends with neo? ', plane.endsWith('neo'));      // true
+          console.log('Ends with Neo? ', plane.endsWith('Neo'));  // false, case-sensitive
+          console.log('Ends with a32? ', plane.endsWith('a32'));      // false
+          console.log('klweioujwektgj'.endsWith('ktgj'));      // true
+          console.log('klweioujwektgj'.endsWith('kTGj'));      // FALSE
+          console.log('klweioujwekTGj'.endsWith('kTGj'));      // TRUE
+          console.log('KLweioujwektgj'.startsWith('KLWE'));      // FALSE
+          console.log('KLWEioujwektgj'.startsWith('KLWE'));      // FALSE
+
+          // split
+          console.log('a+b+c+d+ew+f+g+hj+kl+iii'.split('+'));
+          const [firstName, ,lastName] =  'Vivek Mahesh Nikate'.split(' ');
+          console.log(firstName, lastName);
+          console.log('Vivek Mahesh Nikate'.split(''));     // split by each char
+
+          // reversing the string
+          console.log('vivek'.split('').reverse().join(''));
+
+          // join
+          const newName = ['Mr.', firstName, lastName];
+          console.log(newName);
+          console.log(newName.join(' '));
+
+          // reverse
+          const arr = [1,2,3,4,5,6];
+          console.log(arr);
+          arr.reverse()
+          console.log(arr);
+
+          // reverse on string
+          const arr2 = ['abcd', 'edfg', 'hijk'];
+          console.log(arr2);
+          arr2.reverse()
+          console.log(arr2);
+
+          // reversing each string in array
+          for(const str of arr2)
+          console.log(str.split('').reverse().join(''));
+
+          // padding
+          const mess = 'Go to';
+          console.log(mess.padStart(10, '+'));  // total len is 10
+          console.log(mess.padEnd(10, '+'));  // total len is 10
+
+          // 
+          const maskCreditNum = (number) => {
+          // const numStr = String(number);    // number to string 
+          // instead
+          const numStr = number + '';        // adding empty string, converts the number into string
+          // the num will be 16 digit long the first 12 numb should be replace with * last 4 number should be visible
+          return numStr.slice(-4).padStart(16, '*');
+          }
+
+          console.log(maskCreditNum(123456791234567));
+          console.log(maskCreditNum('7894561234567894'));
+
+          // repeat
+          console.log('Vivek...'.repeat(2));
+          console.log('Good night' + '🌛'.repeat(5));
+          console.log('Its working..' + '✅'.repeat(5));
+
+     - Test: 1. Camel case
+          const arr = [
+               'underscore_case',
+               'first_name',
+               'Some_Variable', 
+               'calculate_AGE',
+               'delayed_departure'
+          ];
+          console.log(arr);
+          const camelCaseArr = [];
+          for(let i=0; i<arr.length; i++){
+               const [first, sec] = arr[i].split('_');
+               const lower = sec.toLowerCase();
+               camelCaseArr.push((first + lower.replace(lower[0], lower[0].toUpperCase())).padEnd(20) +  '✅'.repeat(i+1));
+          }
+
+          for(const [i, ele] of camelCaseArr.entries())
+               console.log(ele);
+     
+     - Test:
+          // formatting string nicely
+          const flights = '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+          const allFlights = flights.split('+');
+          console.log(allFlights);
+          const info = [];
+
+          for(const each of allFlights){
+               const [status, from, to, timing] = each.split(';');
+               // console.log(status, from, to, timing, '\n');
+               const generatedString = status.slice(1).split('_').join(' ') + ' from ' + from.slice(0,3).toUpperCase() + ' to ' + to.slice(0,3).toUpperCase() + ' (' + timing.split(':').join('h') + ')';
+               const withXmark = generatedString.replace('Delayed', '❌ Delayed');
+               const complete =  withXmark.padStart(45);
+               info.push(complete);
+          }
+
+          info.forEach((e) =>{
+          console.log(e);
+          })
 ==============================================================================================================================
+Sect-10: A closer look at the functions:
+     - Default parameters:
+          const bookings = [];
+          // default value
+          // we can use any parameter before price to calculate the price dynamically
+          const createBooking = (flightNum, numOfPeople = 2, price = 90 * numOfPeople) => {
+               // ES5 way
+               // numOfPeople ||= 1;
+               // price ||= 199;
+               
+               const booking = {
+                    flightNum,
+                    numOfPeople,
+                    price,
+               }
+               bookings.push(booking);
+          };
+          createBooking('LH123', 789, 90); 
+          createBooking('LH123');
+          createBooking('LH123',0, 75);
+          createBooking('LH123', undefined, 123);            // skipping the middle parameter
+          console.log(bookings);
+          [
+               {
+                    "flightNum": "LH123",
+                    "numOfPeople": 789,
+                    "price": 90
+               },
+               {
+                    "flightNum": "LH123",
+                    "numOfPeople": 2,
+                    "price": 180
+               },
+               {
+                    "flightNum": "LH123",
+                    "numOfPeople": 0,
+                    "price": 75
+               },
+               {
+                    "flightNum": "LH123",
+                    "numOfPeople": 2,
+                    "price": 123
+               }
+          ]
+
+     - Argument Passing (by value & reference):
+          - in javascript there is only passing by value NO passing by reference.
+          const flight = 'ASD123';
+          const Vivek = {
+               name: 'Vivek Nikate',
+               pass: 456891223,
+          };
+
+          // the primitive type will create a copy of it when passing to function,
+          // but object is reference so name will be changed
+          const checkIn = function(flightNum, passenger){
+               flightNum = 'QWER784';
+               passenger.name = 'Mr. ' + passenger.name;
+
+               if(passenger.pass === 456891223) alert('CheckIN')
+               else alert('Wrong pass');   
+          }
+
+          checkIn(flight, Vivek);
+          console.log(flight, Vivek);          // flight num will stay same, but object name changed
+
+          const newPass = function(person){
+               person.pass = Math.ceil(Math.random() * 1000000000);
+          }
+
+          newPass(Vivek);
+          console.log(Vivek);          // pass changed here coz in newPass function we updated.
+     
+     - First-class function & higher order function:
+          - in javascript the function are the values only. (this concept is called first class function)
+          - we can pass function as argument to another function
+     
+          - high-order function: function that receive a function as argument or return a function as output
+               eg.
+                    .addEventListener('click', greet);
+                    - here addEventListener is a higher-order function & greet is a callback function
+               eg.
+               // lower level of abstraction
+               const oneWord = function(str){
+                    return str.replace(/ /g, '').toLowerCase();
+               }
+
+               // lower level of abstraction
+               const upperFirstWord = function(str){
+                    const [first, ...rest] = str.split(' ');
+                    return [first.toUpperCase(), rest].join(' ');
+               }
+
+               // higher order function
+               const transformer = function(str, fn) {
+                    console.log('Before ' + str);
+                    console.log('After ' + fn(str));
+                    console.log('name of function who modified: ', fn.name)
+               }
+
+               const str = 'javascript is fun..!!!';
+               transformer(str, upperFirstWord);
+               transformer(str, oneWord);
+
+               // char to change its case
+               const ch  = 'a';
+               console.log(ch, ch.toUpperCase());
+
+               const high5 = () => {
+                    console.log('Hi there 🖐️👋, How are you...!!');
+               }
+               // higher-order function
+               document.body.addEventListener('click', high5);
+               // here addEventListener is a higher-order function and high5 is a callback function
+               [1,2,3,4,5].forEach(high5);
+          - higher-order function higher level of abstraction & normal function is lower level abstraction
+
+     - function returning function:
+          const greet = function (message) {
+               return function (name) {
+                    return `Hi ${name}, ${message}.!`;
+               };
+          };
+          console.log(greet('Welcome')('Vivek')) 
+
+          const greet2 = message => name => `Hi ${name}, ${message}.!`;
+          console.log(greet2('How are you.')('Mahesh')) 
+
+     - call, apply & bind methods:
+          - these methods used to manually set the this keyword in functions.
+          const aeroplane1 = {
+               airline:'Europe',
+               code: 'EUR',
+               bookings: [],
+               // book: function()
+               book(flightNum, name){
+                    console.log(`${name} booked seat on ${this.airline} flight ${this.code}-${flightNum}`)
+                    this.bookings.push({
+                         flight: `${this.code}-${flightNum}`,
+                         name,
+                    })
+               },
+          };
+
+          aeroplane1.book('ABC45', 'Vivek Nikate');
+          aeroplane1.book('QWE25', 'Mahesh Nikate');
+
+          const book = aeroplane1.book;
+          // book('GHD87', 'Vivek');    // error as this keyword is undefined
+          const aeroplane2 = {
+               airline:'American',
+               code: 'AMC',
+               bookings: [],
+          }
+
+          const aeroplane3 = {
+               airline: 'Swiss',
+               code: 'SWS',
+               bookings:[],
+          }; 
+
+          // call method
+          book.call(aeroplane3, 'OPR75', 'Aai');
+          book.call(aeroplane1, 'QWT89', 'Nikate');
+          book.call(aeroplane2, 'GHD87', 'Vivek');
+
+          // apply method, it take array of arguments
+          const passengers = ['UI544', 'Suresh'];
+          book.apply(aeroplane3, passengers);
+
+          // or
+          book.call(aeroplane2, ...passengers);
+
+          // Bind: function always with one defined object, this object is always books the flight in American flights
+          const bookInAmerica = book.bind(aeroplane2);
+          bookInAmerica('FRG', 'Mithun');
+          bookInAmerica('BVD', 'Shun');
+          bookInAmerica(756, 'Rani');
+
+          // book in Europe flights
+          const bookInEurope = book.bind(aeroplane1);
+          bookInEurope(493, 'Europian Person');
+
+          // book in swiss flights
+          const bookInSwiss = book.bind(aeroplane3);
+          bookInSwiss('231', 'Last Person');
+
+          console.log(aeroplane1.bookings);
+          console.log(aeroplane2.bookings);
+          console.log(aeroplane3.bookings);
+
+          const specialPlane = {
+               airline: 'Special',
+               code: 'SPL',
+               bookings:[],
+          };
+          // booking only in specific flight function
+          const bookFlightInSPL = book.bind(specialPlane, 787);
+          // as flight number already pass to function just need to pass the name
+          bookFlightInSPL('Me');
+          bookFlightInSPL('You');
+          bookFlightInSPL('We');
+
+          // function will always book flight for Alien
+          const bookFlightInSPL_Alien = book.bind(specialPlane, 787, 'Alien');
+          bookFlightInSPL_Alien();
+          bookFlightInSPL_Alien();
+          console.log("Special bookings:",specialPlane.bookings);
+
+          aeroplane1.planes = 45000;
+          aeroplane1.buyOne = function(){
+               console.log(this);
+               this.planes++;
+               console.log(this.planes);
+          }
+
+          aeroplane1.buyOne();
+
+          // here the this will be bind to button of class buy, so it won't work
+          // document.querySelector('.buy').addEventListener('click', aeroplane1.buyOne());
+
+          // // to make it work manually bind the this keyword to aeroplane1 object, like this
+          // document.querySelector('.buy').addEventListener('click', aeroplane1.buyOne.bind(aeroplane1));
+
+          // partial application, order of parameter is important, whatever you want to keep as default keep it as first argument here.
+
+          const addTx = (rate, val) =>  val + val * rate;
+          console.log(addTx(.1,100));
+
+          // create a custom function with rate defined on top of addTx function.
+          // for bind method first argument is always need is this, here its null,
+          // on function we don't have this keyword so skip it
+          const customAddTx1 = addTx.bind(undefined, .2);      // here rate is 20%
+          const customAddTx2 = addTx.bind(null, .3);           // here rate is 30%
+
+          console.log(customAddTx1(100));                 // just need to pass rate
+          console.log(customAddTx2(300));                 // just need to pass rate
+
+          // using higher-order function
+          const govTx = one => two => console.log(two + two * one);
+          const gov1 = govTx(.1);
+          const gov2 = govTx(.4);
+          gov1(100);
+          gov2(100);
+
+     - Test:
+
+
+
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
