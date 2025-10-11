@@ -261,6 +261,13 @@ Equality operator (== & ===):
 
      console.log(null == 0)      // false
      console.log(undefined == 0) // false
+     console.log(0 == [])      // true
+     console.log(0 == '')      // true
+     console.log([] == '')     // true
+
+     console.log(0 === [])      // false
+     console.log(0 === '')      // false
+     console.log([] === '')     // false
 
 ==============================================================================================================================
 Boolean Logic:
@@ -666,7 +673,7 @@ Object methods:
      console.log(Person.calcNewAge());
      console.log("using bracket new Age: ", Person['calcNewAge']());
 
-     // now directly accessing new age, withou    t computing again
+     // now directly accessing new age, without computing again
      console.log(Person.myNewAge);
      console.log(Person.myNewAge);
      console.log(Person.myNewAge);
@@ -2529,11 +2536,307 @@ Sect-10: A closer look at the functions:
           gov2(100);
 
      - Test:
+          'use strict';
+          const poll = {
+               question: 'What is your favourite programming language?',
+               options: ['1. JavaScript', '2. C++', '3. Rust', '4. Python'],
+               ans: new Array(4).fill(0),
+               registerNewAnswer() {
+                    const choice = prompt(`${this.question}\n ${this.options.join('\n')}\n(Write options Number)`)
+                    this.ans.length > (choice - 1) && this.ans[choice - 1]++;
+                    this.displayResult();
+                    this.displayResult('string');
+               },
+               displayResult(type = 'array') {
+                    if (type === 'array') console.log(this.ans);
+                    else console.log(`Poll results are ${this.ans.join(', ')}`)
+               }
+          }
 
+          const test1 = [5, 2, 3]
+          const test2 = [1, 5, 3, 9, 6, 1]
 
+          document.querySelector('.poll').addEventListener('click', () => poll.registerNewAnswer());
+          // document.querySelector('.poll').addEventListener('click', poll.registerNewAnswer.bind(poll));
 
+          const arrDisplay = poll.displayResult;
+          // arrDisplay.call({ ans: test1 });
+          // arrDisplay.call({ ans: test2 });
 
+          // arrDisplay.call({ ans: test1 }, 'string');
+          // arrDisplay.call({ ans: test2 }, 'string');
+
+          console.log("Using Bind method need to call it explicitly: ")
+          arrDisplay.bind({ ans: test1 })();
+
+          console.log("Using Bind method need to call it explicitly ");
+          arrDisplay.bind({ ans: test2 })();
+
+          console.log("Using Bind method need to call it explicitly ");
+          arrDisplay.bind({ ans: test1 }, 'string')();
+
+          console.log("Using Bind method need to call it explicitly ");
+          arrDisplay.bind({ ans: test2 }, 'string')();
+
+     - Immediately Invoked Function Expressions (IIFE):
+          - only executed once & never again
+          eg.
+               const runOnce = function() {
+                    console.log('once once');
+               }();
+
+               - Not possible in ❌ arrow function
+               const runOnce = () => {
+                    console.log('once once');
+               }();
+
+               - with name
+               (function nice() {
+                    console.log('nice');
+               })();
+
+               - anonymous:
+                    (function() {
+                         console.log('nice');
+                    })();
+
+               - arrow:
+                    (() => {
+                         console.log('nice');
+                    })();
+
+          - custom scope created:
+               {
+                    const z = 45;
+                    var b = 50;
+               }
+
+               // console.log(z);       // not accessible
+               console.log(b);       // accessible
+
+     - Closures:
+          - if the object is reachable by closure then it can not be garbage collected.
+          - variable environment (VE) attached to the function, exactly as it was at the time and place the function was created.
+          - A closure is the closed-over variable environment of the execution context in which a function was created, even after that execution context is gone.
+          - A closure gives access to all the variable of its parent function, even after that parent function has returned,
+            The function keeps the reference to its outer scope, which preserves the scope chain throughout time.
+
+          - A closure make sure that a function does not loose connection to variables that existed at the fucntion's birth place.
+          - we do not create Closures manually.
+          - eg.
+               const secureBooking = function() {
+                    let passenger = 0;
+                    return function(){
+                         passenger++;
+                         console.log(`no.of passenger are: ${passenger}`);
+                    }
+               }
+
+               const bookings = secureBooking();
+               bookings();           // 1
+               bookings();           // 2
+               bookings();           // 3
+               console.dir(bookings)         // check scopes here
+
+               // above function is something like below
+               let x = 0;
+               function a(){
+                    x++;
+                    console.log(x);
+               }
+
+               a();
+               a();
+               a();
+               a();
+          
+          eg.
+               let f;
+               const a = function() {
+               const x = 25;
+                    f = function(){
+                         return x * 2;
+                    }
+               }
+
+               a();
+               console.log(f());
+               const b = function() {
+                    const x = 40;
+                    f = function(){
+                         return x * 12;
+                    }
+               }
+
+               b();
+               console.log(f());
+          eg.
+               (function(){
+                    const head = document.querySelector('h1');
+                    document.querySelector('body').addEventListener('click', () => head.style.color = 'blue');
+               }());
 ==============================================================================================================================
+Sec-11: Arrays:
+     - Slice:
+          const a = [1,2,3,4,5,6,7,8,9,0];
+          // Slice method, doesn't mutate original array
+          // accept start index & end index (excluded)
+          console.log(a.slice(5));       // [6,7,8,9,0]
+          console.log(a.slice(5,7));     // [6,7]
+
+          // accept the -ve index also, -1 is last element
+          console.log(a.slice(-1));         // [0]
+          console.log(a.slice(-2));          // [9, 0]
+          console.log(a.slice(-5, -3));       // [6,7]
+          console.log(a.slice(1, -2));        // [2, 3, 4, 5, 6, 7, 8]
+          console.log(a.slice(-3, -1));       // [8, 9]
+          console.log(a);
+
+          const b = a.slice();      // creating copy of array
+          console.log(b);
+          b.pop();
+          b.pop();
+          b.pop();
+          b.unshift('Nikate');
+
+          const c = [...a];
+          c.push('Vivek')
+
+          console.log(a, b, c);
+
+     - Splice:
+          - it add/ removes the elements from the array
+          - IT MUTATES ORIGINAL ARRAY.
+          - accepts start index & no.of element to be removed & elements to be added
+          - 3 parameters (last parameter is optional or you can send more parameter)
+          eg.
+          const a = [1,2,3,4,5,6,7,8,9,0];
+          let poppedcontent;
+
+          // from 2nd index, removing 0 elements & adding these 2 elements
+          poppedcontent = a.splice(2, 0, 'Vivek', 'Nikate')
+          console.log(a);           // [1, 2, 'Vivek', 'Nikate', 3, 4, 5, 6, 7, 8, 9, 0]
+          console.log("poppedcontent ", poppedcontent);   //  []
+
+          poppedcontent = a.splice(5, 1, 400, 500)
+          console.log(a);               // [1, 2, 'Vivek', 'Nikate', 3, 400, 500, 5, 6, 7, 8, 9, 0]
+          console.log("poppedcontent ", poppedcontent);       // [4]
+
+          poppedcontent = a.splice(-2);             // from 2nd last index removes all
+          console.log(a);               // [1, 2, 'Vivek', 'Nikate', 3, 400, 500, 5, 6, 7, 8]
+          console.log("poppedcontent ", poppedcontent);        // 
+
+          poppedcontent = a.splice(4);            // [1, 2, 'Vivek', 'Nikate']
+          console.log(a);
+          console.log("poppedcontent ", poppedcontent);     // [3, 400, 500, 5, 6, 7, 8]
+
+          // removing 100 elements starting from 3rd index (it crossed limit but still only removed 1)
+          poppedcontent = a.splice(3, 100);            // [1, 2, 'Vivek', 'Nikate']
+          console.log(a);
+          console.log("poppedcontent ", poppedcontent);     // [3, 400, 500, 5, 6, 7, 8]
+
+     - Reverse:
+          - it reverse the array
+          - mutates the original array
+          eg.
+               const a = [1,2,3,4,5,6,7,8,9,0];
+               a.reverse();
+               console.log(a);
+
+     - Concat:
+          - Joins to array & returns new array
+          - does NOT MUTATES original array
+          eg.
+               const a = [1,2,3], b = [4,5,6];
+               let c = a.concat(b);
+               console.log(a,b,c);           //[1, 2, 3]  [4, 5, 6] [1, 2, 3, 4, 5, 6]
+
+               c = b.concat(a);
+               console.log(c);           // [4, 5, 6, 1, 2, 3]
+
+               // spread
+               c = [...a, ...b]
+               console.log(c);          // [1, 2, 3, 4, 5, 6]
+
+     - Join:
+          - forms string
+          - does NOT MUTATES original array
+          - accepts separator (optional), default is comma
+          eg.
+               const a = ['Vivek', 'Mahesh', 'Nikate']
+               let b = a.join()
+               console.log(b)      // without any separator. Vivek,Mahesh,Nikate
+
+               b = a.join('-')
+               console.log(b)      // with -. Vivek-Mahesh-Nikate
+
+               b = a.join('\\')
+               console.log(b)      // with \. Vivek\Mahesh\Nikate
+
+     - at:
+          - at method takes index.
+          - negative index considered from last
+          - does NOT MUTATE original array
+          - we can retrive but can not re-assign a.at(0) = 89. ❌
+          - we can use [] (square bracket) also, but at method is useful when we are doing method chaining
+          eg.
+               const a = ['Vivek', 'Mahesh', 'Nikate', 1,2,3,4,5];
+
+               console.log(a[0], " a[0] is same as a.at(0) ", a.at(0));    // 'Vivek'
+               console.log(a[4], " a[4] is same as a.at(4) ", a.at(4));    // 2
+               console.log(" a[-1] not possible. last element a.at(-1) ", a.at(-1));       // 5
+               console.log('last element: ', a.at(a.length-1));
+
+               console.log(" a[-2] not possible. 2nd last element a.at(-2) ", a.at(-2));   // 4
+               console.log(a[100], " a[100] gets undefined same as a.at(100): ", a.at(100));  // undefined
+               console.log('last element: ', a[a.length-1]);      // 5
+               console.log('last element: ', a.slice(-1)[0])      // slice method returns array
+               // on string 
+               console.log('Vivek'.at(0));             // V
+               console.log('Vivek'.at(-1));            // k
+               console.log('Vivek'.at(-100));       // undefined
+               console.log('Vivek'.at(100));       // undefined
+
+     - forEach loop:
+          - we can not use break or continue statement within forEach loop.
+          
+          const a = ['Vivek', 'Mahesh', 'Nikate', 1,2,3,4,5];
+          // printing the content of array
+          console.log("normal function")
+          a.forEach(function(each){
+               console.log(each);
+          });
+
+          // same as above with arrow function
+          console.log("Arrow function")
+          a.forEach((e)=>{
+               console.log(e);
+          });
+
+          // accessing index,
+          console.log('normal function with index and content: ')
+          a.forEach(function(each, index){
+               console.log(each, index);
+          })
+
+          // arrow function, with index
+          console.log('Arrow function with index and content: ')
+          a.forEach((each, index) => {
+               console.log(index, each);
+          })
+
+          // passing array
+          a.forEach((each, index, arr) => {
+               // if(index === 2) continue;       ❌
+               // if(index === 2) break;          ❌
+               console.log(`${index}.Content - ${arr[index]}`)
+          })
+     
+     - 
+
+
+
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
