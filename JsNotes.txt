@@ -2680,6 +2680,7 @@ Sec-11: Arrays:
      - Slice:
           const a = [1,2,3,4,5,6,7,8,9,0];
           // Slice method, doesn't mutate original array
+          // it returns new array
           // accept start index & end index (excluded)
           console.log(a.slice(5));       // [6,7,8,9,0]
           console.log(a.slice(5,7));     // [6,7]
@@ -2799,7 +2800,12 @@ Sec-11: Arrays:
 
      - forEach loop:
           - we can not use break or continue statement within forEach loop.
-          
+          - modifies the original array
+          eg.
+               const a = [1,2,3];
+               a.forEach((a, i, arr) => arr[i] = a*2);
+               console.log(a);
+
           const a = ['Vivek', 'Mahesh', 'Nikate', 1,2,3,4,5];
           // printing the content of array
           console.log("normal function")
@@ -2831,13 +2837,641 @@ Sec-11: Arrays:
                // if(index === 2) break;          ❌
                console.log(`${index}.Content - ${arr[index]}`)
           })
+
+          eg.
+               const account1 = {
+                    owner: 'Jonas Schmedtmann',
+                    movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+                    interestRate: 1.2, // %
+                    pin: 1111,
+               };
+
+               const account2 = {
+                    owner: 'Jessica Davis',
+                    movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+                    interestRate: 1.5,
+                    pin: 2222,
+               };
+
+               const account3 = {
+                    owner: 'Steven Thomas Williams',
+                    movements: [200, -200, 340, -300, -20, 50, 400, -460],
+                    interestRate: 0.7,
+                    pin: 3333,
+               };
+
+               const account4 = {
+                    owner: 'Sarah Smith',
+                    movements: [430, 1000, 700, 50, 90],
+                    interestRate: 1,
+                    pin: 4444,
+               };
+               const accounts = [account1, account2, account3, account4];
+               console.log(accounts)
+
+               const createUserName = (accs) => {
+                    accs.forEach((acc) => {
+                         acc.username = acc.owner.toLowerCase().split(' ').map(each => each.slice(0,1)).join('');
+                    })
+               }
+               createUserName(accounts);
+               console.log(accounts)
+          
+     - forEach with Map and Set:
+          const currencies = new Map([
+               ['USD', 'United States Dollar'],
+               ['Rup', 'Indian Rupee'],
+               ['EUR', 'Euro'],
+               ['KWD', 'Kuwaiti Dinar'],
+               ['GBP', 'Pound Sterling'],
+          ])
+
+          // Map
+          // priting value of USD
+          console.log(currencies.get('USD'));
+
+          // printing keys & values & map
+          currencies.forEach((value, key, entireMap)=>{
+               console.log(value, key, entireMap);
+          })
+
+          // priting values
+          currencies.forEach(function(value){
+               console.log(value)
+          })
+
+          // on Set:
+          const st = new Set(['USD', 'Rupee', 'Vivek', 'Pound', 'Vivek', 'USD', 'Rupee']);
+          console.log(st);
+
+          // both key & value prints the same value, as set does not have index of key
+          st.forEach(function(value, keys, wholeSet){
+               console.log(value, keys, wholeSet);
+          })
      
-     - 
+     // throwaway variable _
+          const _ = 98;
+          console.log(_);    // 98
+
+     - Bankist App:
+          document.querySelector('body').insertAdjacentHTML("beforebegin", '<h1>Hello there,</h1>')
+          document.querySelector('body').insertAdjacentHTML("afterbegin", '<h1>Hello there,</h1>')
+          document.querySelector('body').insertAdjacentHTML("beforeend", '<h1>Hello there,</h1>')
+          document.querySelector('body').insertAdjacentHTML("afterend", '<h1>Hello there,</h1>')
+          eg.
+               movements.forEach((move, i, arr)=>{
+                    const s = move > 0 ? 'deposit' : 'withdrawal';
+                    const html = `
+                         <div class="movements__row">
+                              <div class="movements__type movements__type--${s}">${i + 1} ${s}</div>
+                              <div class="movements__date">3 days ago</div>
+                              <div class="movements__value">${move}</div>
+                         </div>
+                         `
+                    containerMovements.insertAdjacentHTML('afterbegin', html);
+               })
+
+     - Test:
+          // if dog age is >= 3 then its adult else puppy
+          const JuliaDogs = [1,2,3,4,5];
+          const KateDogs = [1,2,3,4,5];
+
+          const checkAge = (arr1, arr2) => {
+               // copy created
+               let juliaCorrect = arr1.slice();
+               // removing 1st element
+               juliaCorrect.splice(0, 1);
+               // removing last 2 elements
+               juliaCorrect.splice(-2);
+
+               const allDogs = juliaCorrect.concat(arr2);
+               allDogs.forEach((cur, i)=>{ 
+                    console.log(`Dog ${i} is a ${cur>2 ? "Adult" : 'puppy'} Dog`);
+               })
+          }
+          checkAge(JuliaDogs, KateDogs);
+
+     - map:
+          - returns new array based the array we passed without modifying original array
+          eg.
+               const values = [1,2,3,4,5,6,7,8,9,10];
+               const doubled = values.map(cur => cur * 2);
+               // if using normal function then need to return manually in this syntax
+               /*
+               const doubled = values.map(function(cur, idx, arr){
+                    console.log(arr, idx)
+                    return cur * 2;
+               })
+               */
+
+               // using for-of
+               let tripled = [];
+               for(const cur of values){
+                    tripled.push(cur*3);
+               }
+               console.log(values, doubled, tripled);
+          eg.
+               const name = 'Vivek Mahesh Nikate';          // vmn 
+               console.log(name.toLowerCase().split(' '))
+
+               // using bracket notation [0]
+               // const username = name.toLowerCase().split(' ').map(each => ).join('');
+
+               // using slice
+               const username = name.toLowerCase().split(' ').map(each => each.slice(0,1)).join('');
+               console.log(username)        // vmn
+
+     - filter:
+          - filters the array we passed & returns new array. new array contains the element which passess the filter condition
+          eg.
+               const movements = [5000, 3400, -150, -790, -3210, -1000, 8500, -30]
+               // arrow
+               // const allPositive = movements.filter(val => val > 0);
+               // normal
+               const allPositive = movements.filter(function(val, index, arr){
+                    return val > 0;
+               })
+               console.log(allPositive)
+
+               // using for-of loop
+               const positive = [];
+               for(const cur of movements)
+               if(cur > 0) 
+                    positive.push(cur);
+               console.log(positive);
+
+               const negative = movements.filter(cur => cur <= 0);
+               console.log(negative)
+
+     - reduce:
+          - reduces the array we passed & returns single value
+          - boils all array element down to one single value
+          - does not mutate original array
+          eg.  sum of array
+                    const sum = movements.reduce((accum, cur, index, arr) => accum + cur, 0)
+                    console.log(sum)
+               
+               // min & max value from array:
+                    console.log(Math.max(...movements))
+                    console.log(Math.min(...movements))
+               min value of array:
+                    const min = movements.reduce( (val, cur) => {
+                         return (val > cur) ? cur : val;
+                         // if (val > cur)
+                         //     return cur;
+                         // return val;
+                    }, movements[0])
+                    console.log(min)
+               max value of array:
+                    const mx = movements.reduce( (val, cur) => {
+                         return (val < cur) ? cur : val;
+                    }, movements[0])
+                    console.log(mx)
+
+     - TEST: map, filter & reduce:
+          const dogAges1 = [5, 2, 4, 1, 15, 8, 3];
+          const dogAges2 = [16, 6, 10, 5, 6, 1, 4];
+
+          function toHuman(dogAges){
+          return dogAges.map(age => (age <= 2) ? age * 2 : 16 + age * 4)
+          }
+
+          const dogAges1_inHuman = toHuman(dogAges1);
+          const dogAges2_inHuman = toHuman(dogAges2);
+
+          // dog ages in human
+          console.log(dogAges1_inHuman);
+          console.log(dogAges2_inHuman);
+
+          const AdultDogs = dogAgesInHuman => {
+          return dogAgesInHuman.filter(age => age >= 18);
+          }
+
+          // excluding all dogs less than 18 human years
+          const dogAges1_18_yrs_old = AdultDogs(dogAges1_inHuman);
+          const dogAges2_18_yrs_old = AdultDogs(dogAges2_inHuman);
+
+          console.log(dogAges1_18_yrs_old);
+          console.log(dogAges2_18_yrs_old);
+
+          // average human age of adult dogs
+          const avgAge = ages => {
+          return ages.reduce((acc, cur) => acc+cur, 0) / ages.length;
+          }
+
+          const dog1_avg = avgAge(dogAges1_18_yrs_old)
+          const dog2_avg = avgAge(dogAges2_18_yrs_old)
+
+          console.log(dog1_avg);
+          console.log(dog2_avg, ' just taking 3 digit decimal: ' + dog2_avg.toFixed(3));
+
+     - Should not mutate original array. its bad practice mutating the original array.
+     
+     - find:
+          - returns the first element which matches the condition.
+          - returns undefined if no element matches the condition.
+          - does not mutate original array, but if the output is object then changes reflects in Original array.
+          eg.
+               const a = [1,2,3,4];
+               let b = a.find(c => c==2);
+
+               console.log(b)
+               b = 333             // this will not mutate original array
+               console.log(a);
+               console.log(b)
+
+               // here it will mutate
+               const my = accounts.find(acc => acc.owner === 'Sarah Smith')
+               console.log(accounts);
+               my.owner = 'Vivek Nikate';
+               console.log(my)
+
+     - method used in Bankist app
+          find
+          findindex
+          e.preventDefault() to prevent page reload
+          forEach
+          findLast
+          findLastIndex
+          eg.
+               const movements = [1, 2, 3, 4, -40, 5, -6, 7, 90 - 10]
+               console.log(movements);
+               // first -ve value from last
+               console.log(movements.findLast(move => move < 0));       // -6
+
+               // first -ve value from start
+               console.log(movements.find(move => move < 0))             // -40
+
+               // first -ve value's index from last
+               console.log(movements.findLastIndex(move => move < 0));      // 6
+
+               // first -ve value's index from start
+               console.log(movements.findIndex(move => move < 0))            // 4
+
+          some - array should have at least one element which satisfy the condition
+          every - all elements of array should satisfy the condition then returns true
+          eg.
+               const movements = [1, 2, 3, 4, -40, 5, -6, 7, 90 - 10]
+               console.log(movements);
+               // at least single +ve is there?
+               console.log(`at least single +ve is there? ${movements.some(move => move > 0)}`)       // true
+               console.log(`at least single value which is >= 5000 is there? ${movements.some(move => move >= 5000)}`)   // false
 
 
+               // includes & some are same here
+               // for equality use includes for custom conditioning use some
+               console.log(movements.includes(4));       // true
+               console.log(movements.some(move => move === 4))   // true
 
+               // every
+               // all elements are +ve?
+               console.log(movements.every(move => move > 0))       // false
 
+               // all elements must >= -40
+               console.log(movements.every(move => move >= -40))       // true
+     
+          - passing function as callback
+               const deposite = move => move > 0;
+               console.log(movements.some(deposite));
+               // true
+               console.log(movements.every(deposite));
+               // false
+               console.log(movements.filter(deposite));
+               // 1 2 3 4 5 7 80
+               console.log(movements.find(deposite));
+               // 1
+               console.log(movements.findLast(deposite));
+               // 80
+
+     - flat & flatMap:
+          - does not mutate original array.
+          - flat makes the array a single level array, 1D array. based on parameter level passed to it. although parameter passing is optional.
+          const arr = [1,2,3, [4,5,6], [7,8,9, [14, 15]]];
+          console.log(arr.flat());     // [1, 2, 3, 4, 5, 6, 7, 8, 9, [14, 15]]
+          console.log(arr.flat(2));        // [1, 2, 3, 4, 5, 6, 7, 8, 9, 14, 15]
+          
+          // sum, if we need to go deep more than 1 level we need to use this
+          const sum = arr.map(i => i).flat(2).reduce((acc, cur) => acc + cur, 0);
+          console.log(sum);
+
+          // if going one level deep
+          // using both operation in one mapping then flattening = flatmap
+          // as it goes one level deep only so it will return 45 then 14 15 as array 4514,45
+          const s2 = arr.flatMap(i => i).reduce((a,c)=>a+c,0);
+          console.log(s2);
+
+     - TEST:
+          const breeds = [{
+               breed: 'German Shepherd',
+               averageWeight: 32,
+               activities: ['fetch', 'swimming'],
+               }, {
+               breed: 'Dalmatian',
+               averageWeight: 24,
+               activities: ['running', 'fetch', 'agility'],
+               }, {
+               breed: 'Labrador',
+               averageWeight: 28,
+               activities: ['swimming', 'fetch'],
+               }, {
+               breed: 'Beagle',
+               averageWeight: 12,
+               activities: ['digging', 'fetch'],
+               }, {
+               breed: 'Husky',
+               averageWeight: 26,
+               activities: ['running', 'agility', 'swimming'],
+               }, {
+               breed: 'Bulldog',
+               averageWeight: 36,
+               activities: ['sleeping'],
+               }, {
+               breed: 'Poodle',
+               averageWeight: 18,
+               activities: ['agility', 'fetch'],
+          }, ];
+
+          // 1.
+          const huskyWeight = breeds.find(b => b.breed === 'Husky').averageWeight
+          console.log(huskyWeight);
+
+          // 2.
+          const dogBothActivities = breeds.filter(b => b.activities.includes('running') && b.activities.includes('fetch')).map(n => n.breed);
+          console.log(dogBothActivities);
+          console.log("first dog like running and fetch: ", breeds.find(b => b.activities.includes('running') && b.activities.includes('fetch')).breed)
+
+          // 3.
+          // const allActiviti es = breeds.flatMap(b => b.activities)
+          const allActivities = breeds.map(b => b.activities).flat();
+          console.log(allActivities)
+
+          // 4.
+          const uniqueActivities = [...new Set([...allActivities])];
+          // const uniqueActivities = [...new Set(allActivities)];
+          console.log(uniqueActivities);
+
+          // 5.
+          let swimmingAdjacent = breeds.flatMap(b => b.activities.includes('swimming') ? [...b.activities] : [])
+          swimmingAdjacent = [...new Set([...swimmingAdjacent])]
+          console.log(swimmingAdjacent);
+
+          // or
+          console.log("swimmingAdjacent: ", [...new Set(breeds.filter(b => b.activities.includes('swimming')).flatMap(b => b.activities))].filter(act => act !== 'swimming'))
+
+          // 6. avg weight >= 10 of all breeds
+          console.log(`avg weight >= 10 of all breeds? ${breeds.every(b => b.averageWeight >= 10)}`)
+
+          // 7.
+          console.log(`any one breed's activities are >=3? ${breeds.some(b => b.activities.length >= 3)}`)
+
+          // 8.
+          const heavyFetch = Math.max(...(breeds.filter(b => b.activities.includes('fetch')).map(b => b.averageWeight)))
+          console.log(`Heaviest breed that likes to fetch: ${heavyFetch}`)
+
+     - sort:
+          - mutates original array
+          - it automatically works with string & characters array, but not with number
+          eg.
+               const arr = ['z', 'x', 'y', 'abc', 'pqr'];
+               arr.sort();
+               console.log(arr);
+
+               const a1 = [10,9,8,7,6,5,4,3,12,11, 13];
+               a1.sort();
+               console.log(a1)
+
+               // ascending order
+               a1.sort((a,b) => a-b)
+
+               // or 
+               a1.sort((a,b) => {
+               return (a > b) ? 1 : 0;
+               })
+               console.log(a1);
+               a1.sort((a,b) => b-a);
+               console.log(a1);
+
+     - GroupBy:
+          const a = [10, 9, 8, 7, -6, -5, -4, -3, 12, 11, -13];
+          const grouped = Object.groupBy(a, i => i > 0 ? '+ve' : '-ve');
+          console.log(grouped);
+               +ve: (6) [10, 9, 8, 7, 12, 11]
+               -ve: (5) [-6, -5, -4, -3, -13]
+
+          const b = [1,2,3,4,5, 6,7,8,9,10,11,12,13,14,15, 2000, 4000];
+          const grouped2 = Object.groupBy(b, i => {
+               if(i <= 5)
+                    return '<=5';
+               if(i <= 10)
+                    return '<=10';
+               if(i <= 15)
+                    return '<=15';
+               return 'unknownRange';
+          })
+
+          console.log(grouped2);
+               <=5: (5) [1, 2, 3, 4, 5]
+               <=10: (5) [6, 7, 8, 9, 10]
+               <=15: (5) [11, 12, 13, 14, 15]
+               unknownRange: (2) [2000, 4000]
+
+     - Creating array:
+          - fill:
+               - mutates original array
+               - accepts value, start, end parameter (start and end are optional, end is excluded)
+               - returns modified array.
+          eg.
+               let x = new Array(5);
+               console.log(x);
+               // array of size 5 all empty boxes
+
+               x = new Array(5,6,1,2,3,4,8,9,0);
+               // array with 9 elements
+               console.log(x);
+
+               x.fill(44, 3);
+               // fill with 44, but start at index 3 till last
+               console.log(x);
+
+               x.fill(99, 3, 5);
+               // fill with 99 start at 3 & end at 4, exclude last elements
+               console.log(x);
+
+               x.fill(44);
+               // fills complete array with 44 value
+               console.log(x);
+
+               // create array with 10 elements all are 97
+               const a = new Array(10).fill(97);
+               console.log(a);
+
+               // copy of array
+               const b = [1, 2, 3, 4];
+               const c = new Array(...b);
+               c.push(10);
+               console.log(b, c);
+
+          - Array from:
+               - returns new array
+               - accepts length & callback function
+               - callback function accepts current value, index, array
+          eg.
+               x = Array.from({ length: 7 }, () => 1);
+               // array with 7 element with all values 1
+               console.log(x);
+
+               x = Array.from({ length: 3}, (cur, index) => index + 1);
+               // creating array from 1 to 3 elements in it
+               console.log(x);
+
+               const sample = [78, 45, 12, 34, 89, 65, 23, 1]
+               // creating new array with adding 7 in them
+               x = Array.from(sample, (cur) => cur+7);
+               console.log(sample);
+               console.log(x)
+
+               // adding extra based on their index
+               x = Array.from(sample, (cur, indx) => cur+indx);
+               console.log(x);
+
+               // array with 100 dice roles
+               x = Array.from({length: 100}, () => Math.ceil(Math.random() * 6));
+
+     - Non-Desctructive methods:
+          - toReversed()
+               - reverses array & returns new array without mutating original array
+          - toSorted()
+               - sorts array & returns new array without mutating original array
+          - toSpliced()
+               - splices array & returns new array without mutating original array
+          eg.
+          const a = [45, 23, 12, 67, 89, 1, 3, 2, 4, 5, 9, 0];
+          // sorting array
+          console.log(a.toSorted((a,b) => a-b));      // sorted as number
+          console.log(a.toSorted());                 // sorted as string
+
+          // reversing array
+          console.log(a.toReversed());
+
+          // removing & adding elements into array
+          console.log(a.toSpliced()); // copy of original array
+          console.log(a.toSpliced(0, 2, 'Vivek', 'Nikate')); // removing 2 elements from 0th index & adding Vivek & Nikate string to it
+
+          // removes all elements. if elements exist it removes them else ignores
+          console.log(a.toSpliced(2, 100, 'Vivek', 'Nikate')); // removing 100 elements from 2nd index & adding Vivek & Nikate string to it
+          console.log(a.toSpliced(12, 10, 'Vivek', 'Nikate')); // removing 10 elements from 2nd index & adding Vivek & Nikate string to it
+
+          // creating copy of array with 5th index has value 87
+          const b = a.with(5, 87);
+          console.log(b);
+          console.log(a);            // original array still same
+
+     - reduce:
+          // grouping array by reduce.
+          const a = [1, -1, -2, -3, -4, 2, 3, 4, 5, 6, -5, -6]
+          const b = a.reduce((sum, cur) => {
+               cur > 0 ? sum.depo.push(cur) : sum.withdraw.push(cur);
+               return sum;
+          },{depo: [], withdraw: []})
+          console.log(b)
+
+     - Titlecase
+          // this is a nice title -> This Is a Nice Title
+
+          const convertToTitleCase = (str) => {
+          const exceptions = ['a', 'an', 'the', 'or', 'on', 'in', 'with'];
+          str = str.toLowerCase().split(' ').map(each => !exceptions.includes(each) ? each.slice(0,1).toUpperCase() + each.slice(1) : each).join(' ');
+          console.log(str);
+          }
+
+          convertToTitleCase('this is a nice title');             // This Is a Nice Title
+          convertToTitleCase('i\'m the man of my words..!');      // I'm The Man Of My Words..!
+          convertToTitleCase('he is a good boy');                 // He Is a Good Boy
+          convertToTitleCase('this is a cake');                   // This Is a Cake
+          convertToTitleCase('this is a x man.');                 // This Is a x Man.
+          convertToTitleCase('i\'m an ant-man');                 // I'm an Ant-man
+          convertToTitleCase('do either this or that');                 // Do Either This or That
+          convertToTitleCase('this is the sun');                 // This Is the Sun
+          convertToTitleCase('the ball is on the table.');                 // the Ball Is on the Table.
+          convertToTitleCase('clothes are there in cupboard');                 // Clothes Are There in Cupboard
+          convertToTitleCase('im going with my friends');                 // Im Going with My Friends
+
+     - TEST:
+          const dogs = [
+               { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+               { weight: 8, curFood: 200, owners: ['Matilda'] },
+               { weight: 13, curFood: 275, owners: ['Sarah', 'John', 'Leo'] },
+               { weight: 18, curFood: 244, owners: ['Joe'] },
+               { weight: 32, curFood: 340, owners: ['Michael'] },
+          ];
+
+          // 1. 
+          dogs.forEach(dog => dog.recFood = Math.floor(Number(((dog.weight ** .75) * 28))))
+          console.log(dogs);
+
+          // 2.
+          const sarahsDog = dogs.find(dog => dog.owners.includes('Sarah'));
+          console.log(`sarah's dog eating too ${ sarahsDog.curFood > sarahsDog.recFood ? 'much' : 'little'}`);
+
+          // 3. ownersTooMuch & ownersToLittle
+          let ownersTooMuch = [], ownersToLittle =[];
+          dogs.forEach(dog => dog.curFood > dog.recFood ? ownersTooMuch.push(dog.owners) : ownersToLittle.push(dog.owners));
+
+          ownersTooMuch = ownersTooMuch.flat();
+          ownersToLittle = ownersToLittle.flat();
+          console.log(ownersTooMuch, ownersToLittle);
+
+          // 4.
+          console.log(ownersTooMuch.join(' and ') + `'s dogs eat too much!'`)
+          console.log(ownersToLittle.join(' and ') + `'s dogs eat too little!`)
+
+          // 5.
+          console.log('exact food needed?: ', dogs.some((dog, i) => dog.curFood === dog.recFood && i));
+
+          // 6.
+          const rate = 10;        
+          // 10% above or below
+          const check = (dog) => {
+          const above = dog.recFood + dog.recFood/rate;
+          const below = dog.recFood - dog.recFood/rate;
+          return below <= dog.curFood && dog.curFood <= above;
+          }
+
+          console.log(`All dogs are eating Ok..?: `, dogs.every(dog => check(dog)))
+
+          // 7.
+          const dogsEatOk = dogs.filter(dog => check(dog))
+          console.log(dogsEatOk);
+
+          // 8.
+          const grouped = Object.groupBy(dogs, (dog) => {
+          if(dog.curFood > dog.recFood) return 'too-much';
+          if(dog.curFood < dog.recFood) return 'too-little';
+          return 'exact';
+          });
+
+          console.log(grouped);
+
+          // 9.
+          // using Object.groupBy
+          const groupBasedOnNumOfOwner1 = Object.groupBy(dogs, dog => dog.owners.length)
+          console.log(groupBasedOnNumOfOwner)
+
+          // using reduce method
+          const groupBasedOnNumOfOwner2 = dogs.reduce((obj, dog) =>{
+          const key = dog.owners.length;
+          obj[key] = [...(obj[key] || []), dog];
+          return obj;
+          }, {})
+          console.log(groupBasedOnNumOfOwner2)
+
+          // 10.
+          const sortedDogsByRecFood = dogs.toSorted((a, b) => a.recFood-b.recFood);
+          console.log("sorted dogs: ",sortedDogsByRecFood);
+          console.log("original dogs: ",dogs);
 ==============================================================================================================================
+sec-12: Number, dates, Intl & Timers:
+     
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
