@@ -72,6 +72,7 @@ if(js === "Vivek") alert(js)
      // country = 'sadf';        // invalid, its const
      // console.log(country);
 
+
 - MultiLine log statement
      // using single quote
      console.log('Vivek Nikate\n\
@@ -3926,6 +3927,239 @@ sec-12: Number, dates, Intl & Timers:
                     }
                }, 1000);
 ==============================================================================================================================
+sec-13: Advanced DOM & Events:
+     - selecting whole web page
+          - document.documentElement
+               <html lang=​"en-us">​<head>​…​</head>​<body id=​"capgemini" class=​"organization">​…​</body>​flex</html>​
+          - document.head
+               ​<head>​…​</head>
+          - document.body
+               ​<body id=​"capgemini" class=​"organization">​…​</body>​
+
+          - document.querySelector('') & document.querySelectorAll(''): to select node element
+               - you can give class name in quotes startig with (.) period symbol
+               - querySelectorAll returns NodeList which does not update deleted nodes automatically.
+                    eg.
+                         document.querySelector('.highlight')                // only selects the first occurrence of this class
+                         document.querySelectorAll('.highlight')             // selects all occurrence of this class
+
+               - you can give tag name in quotes like (p, h1, h2, div, body)
+                    eg.
+                         document.querySelector('section')            // only selects the first occurrence of this tag
+                         document.querySelectorAll('section')         // selects all occurrence of this tag
+                    
+               - you can give id in quote, starting with (#) Pound symbol
+                    eg.
+                         document.querySelector('#section--1')
+
+               - to Select all class elements, without period(.) symbol
+                    - returns HTMLCollection which automatically updates the deleted nodes
+                    document.getElementsByClassName('highlight');
+                    - selects all tags who has class highlight
+
+               - to select id elements, without Pound(#) symbol
+                    document.getElementById('section--2')
+
+               - to select all element with tag section
+                    - returns HTMLCollection, its live collection
+                    document.getElementsByTagName('section')
+
+     - selecting, creating & deleting element:
+          - insertAdjacentHTML 
+          - creating:
+               const para = document.createElement('div');
+               para.innerHTML = `we use cookies to imporve customer experience <button>Got it</button>`
+
+               const msg = document.createElement('div')
+               msg.innerHTML = `we use cookies to improve user experience <button class = "btn btn--close-cookie">Got it </button>`
+
+               const header = document.getElementsByClassName('header')[0];
+               header.prepend(msg)
+               msg.classList.add('cookie-message')
+
+          - inserting: // the para will be inserted only one place at a time
+               - prepend & append method also we can use to move the element.
+               const header = document.querySelector('.header');
+               header.prepend(para);                        // inserting at start the Heading (same line, child element)
+               header.append(para);                         // inserting at end of the Heading (same line, child element)
+
+               header.before(para);                         // inserting before the Heading (above line, sibling element)
+               header.after(para);                         // inserting after the Heading (below line, sibling element)
+
+               - to insert into multiple places
+                    header.prepend(msg.cloneNode(true))
+                    header.append(msg.cloneNode(true))
+                    header.before(msg.cloneNode(true))
+                    header.after(msg.cloneNode(true))
+
+          - removing:
+               para.remove();
+
+               // or
+               para.parentElement.removeChild(para);
+
+               eg.
+                    document.querySelector('.btn--close-cookie').addEventListener('click', () => msg.remove())
+          eg.
+               // creating
+               const msg = document.createElement('div')
+               msg.innerHTML = `we use cookies to improve user experience <button class = "btn btn--close-cookie">Got it </button>`
+
+               // selecting
+               const header = document.getElementsByClassName('header')[0];
+
+               // inserting
+               header.prepend(msg)
+               msg.classList.add('cookie-message')
+
+               // removing
+               document.querySelector('.btn--close-cookie').addEventListener('click', () => msg.remove())
+
+     - styles, attributes & classes:
+          styles:
+               - these styles are inline styles, you can retrive styles which you set
+                    msg.style.backgroundColor = '#37383d';
+                    msg.style.width = '104%';
+                    msg.style.color = '#fff';
+                    msg.style.padding = '16px';
+                    msg.style.textAlign = 'center';
+
+               - only style we set is retrived
+                    msg.style.backgroundColor                              // 'rgb(55, 56, 61)'
+                    msg.style.display                                      // ''
+               
+               - to retrive the styles we have not set, styles which are visible on page
+                    getComputedStyle(msg)
+                    getComputedStyle(msg).display                                    // 'flex'
+
+                    // setting styles, which is there already
+                    msg.style.height = Number.parseFloat(getComputedStyle(msg).height) + 40 + 'px'
+                    
+                    // changing the color of css style :root
+                    document.documentElement.style.setProperty('--color-primary', 'orangered');
+          
+          Attributes:
+               - attributes are used to store information about elements
+               eg.
+                    src, alt, href, width, height, class, id, etc.
+               - we can access the only built-in HTML attributes of elements, if we give custom attributes we can't access them using JavaScript
+
+               <img src="img/logo.png" alt="Bankist logo" class="nav__logo vivek nikate hello" id="logo" designby = 'Vivek Nikate'>
+
+               let logo = document.querySelector('.nav__logo')
+               logo.alt                      // 'Bankist logo'
+               logo.src                      // 'http://127.0.0.1:5500/sec-13/starter/img/logo.png'    (This is absolute url)
+
+               // to just get the value of src
+                    - for src & href to get relative url we use getAttribute method .getAttribute('href')
+                    logo.getAttribute('src')       // 'img/logo.png'
+                    logo.getAttribute('SRC')       // 'img/logo.png'    (this is relative url)
+
+               logo.classList or logo.className      // nav__logo vivek nikate hello
+               logo.id                  // logo
+
+               // setting attributes
+               logo.alt = 'Beautiful logo'
+
+               // to get non-Standard properties
+               logo.getAttribute('designBy')                          // Vivek Nikate
+               logo.getAttribute('deSIGNby')                          // Vivek Nikate, it is not case sensitive
+
+               // non-Standard attributes setting
+               logo           // img src=​"img/​logo.png" alt=​"Bankist logo" class=​"nav__logo" id=​"logo">​
+               logo.setAttribute('company', 'Giant Bank')
+               logo           // <img src=​"img/​logo.png" alt=​"Bankist logo" class=​"nav__logo" id=​"logo" company=​"Giant Bank">​
+
+               - Data Attributes:
+                    - should starts with data-
+                         eg.
+                              data-version-number = "2.0"
+
+                        
+                    <img 
+                         src="img/logo.png" 
+                         alt="Bankist logo" class="nav__logo" 
+                         id="logo" 
+                         data-version-number="2.0" 
+                         data-setting-config="401.0" 
+                         data-nam="name here" 
+                    /> 
+                    // while accessing we use dataset then camelCase
+                         logo.dataset.versionNumber              // '2.0'
+                         logo.dataset.settingConfig              // '401.0'
+                         logo.dataset.nam                        // 'name here'
+
+               eg.
+                    <h3 contenteditable="true"> Nice to meet you. </h3>
+
+          - classes:
+               logo.classList.add();
+               logo.classList.remove();
+               logo.classList.toggle();
+               logo.classList.contains();
+               logo.classList.replace('a', 'b');
+
+               // not recommended, it will override all the classes   
+               logo.className = 'new-class';
+     
+     - const v = document.querySelector('.modal')
+          v.outerHTML              // prints the whole element including it self
+          v.innerHTML              // prints the content inside the element
+
+     - scroll:
+          - this gives current scroll position
+               window.scrollY or scrollY
+               window.scrollX or scrollX
+
+          - current visible area of viewport:
+               - gives width and height
+               document.documentElement.clientWidth  
+               document.documentElement.clientHeight
+          
+          - getBoundingClientReact()
+          - window.scrollTo(x, y)
+          eg.
+               const sec1 = document.querySelector('#section--1')
+               document.querySelector('.btn--scroll-to').addEventListener('click', (e) => {
+                    sec1.scrollIntoView({ behavior: "smooth" })
+               })
+
+     - Event & event handlers:
+          const h1 = document.querySelector('h1');
+
+          // RECOMMENDED
+          h1.addEventListener('mouseenter', () => {
+               alert('Moused Entered.!');
+          })
+
+          // or not RECOMMENDED, because if we use any other event handler, the new will override older one. so we can't add multiple event handlers
+          h1.onmouseenter = () => {
+               alert("mouse Entered..!");
+          }
+
+          // removing handler
+               - we can keep this same in setTimeout function
+               const alertH1 = () => {
+                    alert('hovered.!!');
+                    h1.removeEventListener('mouseenter', alertH1);
+               }
+               h1.addEventListener('mouseenter', alertH1);
+
+               //or
+               setTimeout(() => {
+                    h1.removeEventListener('mouseenter', alertH1)
+               }, 3000);
+          
+          // event through HTML
+               <a onclick="alert('Clicked on Feature section')">Features</a>
+          
+     - Event bubbling & capturing:
+          - e.target
+          - e.currentTarget
+
+          // not RECOMMENDED 
+          - e.stopPropagation()    -- to stop the event bubbling up to parent elements (stop propagating to parent, when click happens on child)
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
