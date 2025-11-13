@@ -4160,7 +4160,304 @@ sec-13: Advanced DOM & Events:
           // not RECOMMENDED 
           - e.stopPropagation()    -- to stop the event bubbling up to parent elements (stop propagating to parent, when click happens on child)
 
+     - scroll:
+          eg.
+               // page navigation
+               document.querySelectorAll('.nav__link').forEach((e) => e.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = e.target.getAttribute('href');
+                    // console.log(this.href);    // can't use this prints absolute path
+                    // console.log(id)
+                    document.querySelector(id).scrollIntoView({ behavior: "smooth" })
+               }))
+
+     - Event Delegation:
+          - attaching the event listener to the parent element/ common ancestor of all child elements where we want to listen to the event.
+          - this is the best way to add event handler to the HTML elements instead of adding event handler to each element
+          - determine what element originated the event.
+          eg.
+          document.querySelector('.nav__links').addEventListener('click', function (e) {
+               // console.log('clicked', e.target.getAttribute('href'));
+               e.preventDefault();
+               const id = e.target;
+               // console.log(id);
+               if (id.classList.contains('nav__link')) {
+                    document.querySelector(id.getAttribute('href')).scrollIntoView({ behavior: "smooth" })
+               }
+          })
+
+     - DOM traversing;
+          - selecting child of h1
+               - document.querySelector('h1').querySelectorAll('.highlight')
+               - document.querySelector('h1').childNodes              // gives all tags, comments, text in h1
+               - document.querySelector('h1').children                // gives only direct children tags inside h1
+          
+          - firstElementChild
+               h1.firstElementChild.style.color = 'BLACK';       // color is not case-sensitive
+               document.querySelector('h1').lastElementChild.style.color = 'grEEn'
+          
+          - parent:
+               🧩parentNode
+                    Returns the parent node of any type (element, text, comment, etc.)
+                    Works for all node types, not just elements.
+                    Example: could return a Document, DocumentFragment, or even a non-element node.
+               🧩parentElement
+                    Returns only if the parent is an element (<div>, <span>, etc.)
+                    If the parent is not an element (like Document or DocumentFragment), it returns null.
+
+               document.querySelector('.highlight').parentNode                                           // returns parent node
+               document.querySelector('.highlight').parentElement                                        // returns parent element
+               eg.
+                    console.log(document.documentElement.parentNode);    // #document
+                    console.log(document.documentElement.parentElement); // null
+               
+          - closest():
+               - tries to find the parent, climbs multiple levels up until it finds something that matches the selector
+               parentElement → go one level up
+               closest(selector) → go up until something matches (or return null)
+
+               const el = document.querySelector('.highlight');
+               console.log(el.parentElement);            // immediate parent
+               console.log(el.closest('.container'));  // nearest ancestor with .container class
+
+          - sliblings:
+               document.querySelector('h1').previousElementSibling              // returns previous sibling if exists else returns null
+               document.querySelector('h1').nextElementSibling                 // returns next sibling if exists else returns null
+
+               previousSibling/ nextSibling:
+                    These return the immediately adjacent node (not just elements) in the DOM tree.
+                    That means it could be:
+                         an element (<div>, <p>, etc.),
+                         a text node (like whitespace or line breaks),
+                         or a comment node.
+
+                    🔍 Example:
+                         <div>First</div>
+                         <h1>Hello</h1>
+                         <p>Next</p>
+                         <script>
+                         const h1 = document.querySelector('h1');
+                         console.log(h1.previousSibling); // often a text node ("\n" or spaces)
+                         console.log(h1.nextSibling);     // often a text node ("\n" or spaces)
+                         </script>
+
+                    ✅ Output might be:
+                    #text   // because of newline before/after <h1>
+                    #text
+
+                    If there’s no whitespace:
+                    <div>First</div><h1>Hello</h1><p>Next</p>
+                    Then:
+                         console.log(h1.previousSibling); // <div>First</div>
+                         console.log(h1.nextSibling);     // <p>Next</p>
+
+               - to get all siblings:
+                    const h1 = document.querySelector('h1');
+                    console.log(h1.parentElement.children); // returns all siblings
+
+     - tab component:
+          // this makes application slow
+          // tabs.forEach(t => t.addEventListener('click', () => console.log('clicked')))
+
+          // use event delegation
+          tabsContainer.addEventListener('click', function (e) {
+               const choosen = e.target.closest('.operations__tab')
+
+               // guard clause
+               if (!choosen) return;
+               
+               // choosen.parentElement.querySelector('.operations__tab--active').classList.remove('operations__tab--active')
+               tabs.forEach(t => t.classList.remove('operations__tab--active'))
+               choosen.classList.add('operations__tab--active');
+               // console.log(choosen.dataset.tab);
+
+               tabsContent.forEach(c => c.classList.remove('operations__content--active'))
+               document.querySelector(`.operations__content--${choosen.dataset.tab}`).classList.add('operations__content--active')
+          })
+
+     - Slider:
+          const slides = document.querySelectorAll('.slide');
+          const slider = document.querySelector('.slider');
+          slider.style.overflow = 'visible';
+          slider.style.transform = 'scale(.7) translateX(-800px)'
+
+          const btnLeft = document.querySelector('.slider__btn--left')
+          const btnRight = document.querySelector('.slider__btn--right')
+          const dotContainer = document.querySelector('.dots')
+
+          const gotoSlide = function (indx) {
+          slides.forEach((slide, i) => {
+          slide.style.transform = `translateX(${100 * (i - indx)}%)`;
+          })
+          }
+
+          let curSlide = 0, maxSlides = slides.length;
+          // btnRight.addEventListener('click', function () {
+          //   curSlide = (curSlide + 1) % maxSlides;
+          //   // slides.forEach((slide, i) => {
+          //   //   slide.style.transform = `translateX(${(i-curSlide) * 100}%)`
+          //   // })
+          //   // going in right side
+          //   gotoSlide(curSlide);
+          // })
+
+          // btnLeft.addEventListener('click', function () {
+          //   curSlide = (curSlide - 1 + maxSlides) % maxSlides;
+          //   // slides.forEach((slide, i) =>{
+          //   //   slide.style.transform = `translateX(${100 * (i-curSlide)}%)`
+          //   // })
+          //   // going in left side
+          //   gotoSlide(curSlide);
+          // })
+
+          // slides.forEach((slide, i) => {
+          //   slide.style.transform = `translateX(${i * 100}%)`
+          // })
+
+          // for first time 0th slide 
+
+          gotoSlide(0);
+          const nextSlide = function () {
+          curSlide = (curSlide + 1) % maxSlides;
+          gotoSlide(curSlide);
+          activateDot(curSlide);
+          }
+
+          const prevSlide = function () {
+          curSlide = (curSlide - 1 + maxSlides) % maxSlides;
+          gotoSlide(curSlide);
+          activateDot(curSlide);
+          }
+
+          btnRight.addEventListener('click', nextSlide);
+          btnLeft.addEventListener('click', prevSlide);
+
+          document.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowLeft') prevSlide();
+          e.key === 'ArrowRight' && nextSlide();
+          })
+
+          // creating dots
+          const createDots = function () {
+          //we are not using first argument so we can use this throw away variable
+          slides.forEach((_, i) => {
+          dotContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+          })
+          }
+          createDots();
+
+          const activateDot = function (currentSlide) {
+          document.querySelectorAll('.dots__dot').forEach(dot => dot.classList.remove('dots__dot--active'))
+          document.querySelector(`.dots__dot[data-slide="${currentSlide}"]`).classList.add('dots__dot--active')
+          }
+          activateDot(0);
+
+          dotContainer.addEventListener('click', function (e) {
+          if (e.target.classList.contains('dots__dot')) {
+          // const slide = Number(e.target.dataset.slide)
+
+          // using destructuring
+          const { slide } = e.target.dataset;
+          gotoSlide(Number(slide));
+          activateDot(Number(slide));
+          }
+          })
+
+     -- Slider as function:
+          const Slider = function () {
+               const slides = document.querySelectorAll('.slide');
+               const slider = document.querySelector('.slider');
+               const btnLeft = document.querySelector('.slider__btn--left')
+               const btnRight = document.querySelector('.slider__btn--right')
+               const dotContainer = document.querySelector('.dots')
+
+               const gotoSlide = function (indx) {
+               slides.forEach((slide, i) => {
+                    slide.style.transform = `translateX(${100 * (i - indx)}%)`;
+               })
+               }
+
+               let curSlide = 0, maxSlides = slides.length;
+               // btnRight.addEventListener('click', function () {
+               //   curSlide = (curSlide + 1) % maxSlides;
+               //   // slides.forEach((slide, i) => {
+               //   //   slide.style.transform = `translateX(${(i-curSlide) * 100}%)`
+               //   // })
+               //   // going in right side
+               //   gotoSlide(curSlide);
+               // })
+
+               // btnLeft.addEventListener('click', function () {
+               //   curSlide = (curSlide - 1 + maxSlides) % maxSlides;
+               //   // slides.forEach((slide, i) =>{
+               //   //   slide.style.transform = `translateX(${100 * (i-curSlide)}%)`
+               //   // })
+               //   // going in left side
+               //   gotoSlide(curSlide);
+               // })
+
+               // slides.forEach((slide, i) => {
+               //   slide.style.transform = `translateX(${i * 100}%)`
+               // })
+
+               // for first time 0th slide 
+
+               const nextSlide = function () {
+               curSlide = (curSlide + 1) % maxSlides;
+               gotoSlide(curSlide);
+               activateDot(curSlide);
+               }
+
+               const prevSlide = function () {
+               curSlide = (curSlide - 1 + maxSlides) % maxSlides;
+               gotoSlide(curSlide);
+               activateDot(curSlide);
+               }
+
+               btnRight.addEventListener('click', nextSlide);
+               btnLeft.addEventListener('click', prevSlide);
+
+               document.addEventListener('keydown', function (e) {
+               if (e.key === 'ArrowLeft') prevSlide();
+               e.key === 'ArrowRight' && nextSlide();
+               })
+
+               // creating dots
+               const createDots = function () {
+               //we are not using first argument so we can use this throw away variable
+               slides.forEach((_, i) => {
+                    dotContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+               })
+               }
+
+               const activateDot = function (currentSlide) {
+                    document.querySelectorAll('.dots__dot').forEach(dot => dot.classList.remove('dots__dot--active'))
+                    document.querySelector(`.dots__dot[data-slide="${currentSlide}"]`).classList.add('dots__dot--active')
+               }
+
+               dotContainer.addEventListener('click', function (e) {
+                    if (e.target.classList.contains('dots__dot')) {
+                         // const slide = Number(e.target.dataset.slide)
+
+                         // using destructuring
+                         const { slide } = e.target.dataset;
+                         gotoSlide(Number(slide));
+                         activateDot(Number(slide));
+                    }
+               })
+
+               const init = function(){
+                    createDots();
+                    activateDot(0);
+                    gotoSlide(0);
+               }
+               init();
+          }
+          Slider();
+
+     - 
 ==============================================================================================================================
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
