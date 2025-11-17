@@ -4455,8 +4455,705 @@ sec-13: Advanced DOM & Events:
           }
           Slider();
 
-     - 
+     - events:
+          - DOMContentLoaded
+          - load
+          - beforeunload
+     
+     - script: process of fetching & executing scripts.
+          - <script src="./script.js"></script>
+          - <script async src="script.js"></script>
+          - <script defer src="script.js"></script>
 ==============================================================================================================================
+sec-14: OOPs:
+     - Object Oriented Programming (OOP)
+     - Encapsulation
+     - Abstraction
+     - Inheritance
+     - Polymorphism
+
+     - Encapsulation:
+          Encapsulation is the bundling of data with the methods that operate on that data into a single unit, such as a class. A primary goal of encapsulation is to hide the internal state of an object and require all interaction to be performed through the object's methods, which promotes data security and allows the internal implementation to be changed without affecting external code. This is achieved through "data hiding," which involves making the data and methods private and providing public "getters" and "setters" to control access
+     
+     - Abstraction:
+          fundamental principle that involves hiding the complex implementation details of an object and exposing only the essential features or functionalities that are relevant to the user or other parts of the system. It focuses on "what" an object does, rather than "how" it does it.
+     
+     - Inheritance:
+          concept where a class (child/derived) can inherit properties and methods from another class (parent/base). This promotes code reusability by avoiding duplication and establishing a hierarchical "is-a" relationship, such as a Dog "is an" Animal. The child class can use the inherited features and also add its own unique attributes and methods.
+     
+     - Polymorphism:
+          This enables objects to exhibit different behaviors depending on the context, providing flexibility and code reusability. It is typically implemented through method overloading and method overriding. 
+
+     eg.
+          const Person = function(n, l, byear) {
+               this.name = n;
+               this.lname = l;
+               this.birthYear = byear;
+
+               // never do this instead use prototypal inheritance
+               // this.calcAge = function(){
+               //     console.log(2025 - this.birthYear);
+               // }
+          }
+
+          // declare method inside prototype
+          Person.prototype.calcAge = function(){
+          console.log(2025 - this.birthYear);
+          }
+          Person.prototype.species = 'Homo Sapiens'
+
+          const a = 10;
+          const b = new Person('v','n', 2000);
+          console.log(b);                // Person {name: 'v', lname: 'n', birthYear: 2000, calcAge: ƒ}
+          // when using prototype        // Person {name: 'm', lname: 'n', birthYear: 1974}
+
+          console.log(b.calcAge())
+          console.log(b.__proto__);
+          console.log(b.__proto__ === Person.prototype); // true
+
+
+          // hasownproperty
+          console.log('b hasownproperty name? '+b.hasOwnProperty('name'));
+          console.log('b hasownproperty lname? '+b.hasOwnProperty('lname'));
+          console.log('b hasownproperty calcAge? '+b.hasOwnProperty('calcAge'));
+          console.log('b hasownproperty species? '+b.hasOwnProperty('species'));
+
+          const c = new Person('m', 'n', 1974);
+          console.log(c);                // Person {name: 'm', lname: 'n', birthYear: 1974, calcAge: ƒ}
+          console.log(c.calcAge());
+          console.log(b instanceof Person); // true
+          console.log(a instanceof Person); // false
+
+     - inheriting property from prototype, is called prototypal inheritance or delegation
+     - prototype chain
+     - 
+          const a = [1,2,3,4,5];    // [] and new Array() are same
+          console.log(a.__proto__);
+          console.log(Array.prototype)
+          console.log(a.__proto__ === Array.prototype);
+          console.dir(x => x+1);
+     
+     - Test-1:
+          // construction function
+          const Car = function(make, speed){
+               this.make = make;
+               this.speed = speed;  
+          }
+
+          Car.prototype.accelerate = function(){
+               this.speed = this.speed+10;
+               console.log(this.speed);
+          }
+
+          Car.prototype.brake = function(){
+               // this.speed = this.speed-5;
+               this.speed -= 5;
+               console.log(this.speed);
+          }
+
+          const BMW = new Car('BMW', 120);
+          BMW.accelerate();
+          BMW.brake();
+          console.log(BMW.make);
+
+          const Mercedes = new Car('Mercedes', 75);
+          Mercedes.accelerate();
+          Mercedes.brake();
+          console.log(Mercedes.make);
+
+     - ES6 classes:
+          - whatever methods delcared inside class outside constructor() function, will be added to prototype
+          eg.
+          // class expression
+               const PersonCl = class {};
+
+          // class declaration
+          // i want personcl2 class should have attributes name & birthyear, so need to pass them in constructor function
+          class PersonCl2 {
+               constructor(name, birth){
+                    this.name = name;
+                    this.year = birth;
+               }
+          
+          // method is added to .prototype property of PersonCl2
+               calcAge(){
+                    console.log(`Age is: ${2025 - this.year}`);
+               }
+          };
+
+          // manually adding on prototype property
+          PersonCl2.prototype.greet = function(){
+               console.log(`Hey ${this.name}`);
+          }
+
+          const Vivek = new PersonCl2('Vivek', 2000);
+          Vivek.calcAge();
+          Vivek.greet();
+
+          // function declaration are hoisted
+          v();
+          function v(){
+               console.log('hi...');
+          }
+
+          // function expression not hoisted 
+          z();
+          const z = function(){
+               console.log('hi z...');
+          }
+
+          // 1. classes declaration are not Hoisted
+          // 2. class are first-class citizens (we can pass them to function or return them from function)
+          // 3. classes are executed in strict mode (by default)
+
+     - setters and getters:
+          - also called accessors properties.
+          - and other properties known as data properties.
+
+          eg.
+               // on Object
+               const account = {
+                    owner: 'Vivek',
+                    movements: [1, 2, 3, 4],
+                    // getters
+                    get latest() {
+                         return this.movements.slice(-1).pop();
+                    },
+
+                    // setters
+                    set latest(move) {
+                         this.movements.push(move);
+                    }
+               };
+
+               console.log(account.latest)
+               console.log(account.movements);
+               account.latest = 8000;
+               console.log(account.movements);
+
+               // on Class
+               class Person {
+                    constructor(name, year) {
+                         this.name = name;
+                         this.year = year;
+                    }
+
+                    // getter
+                    get Age() {
+                         return 2025 - this.year;
+                    }
+
+                    // setter
+                    set Name(newName) {
+                         this.name = newName;
+                    }
+               };
+
+               const p1 = new Person('Vivek', 2000);
+               console.log(p1.Age);      // without parenthesis
+               console.log(p1.name);
+
+               p1.Name = "Vivek Nikate";
+               console.log(p1.name);
+
+     - Static methods:
+          // on constructor function
+          const account = function(name, arr){
+               this.owner= name;
+               this.movements= arr;
+          };
+
+          const a1 = new account('Vivek', [1,2,3,4]);
+          // static method
+          account.greet = function(){
+               console.log(this.owner+' Hi there');
+          };
+          // a1.greet();      // not possible
+          account.greet();
+
+          // on Class
+          class Person {
+               constructor(name, year){
+                    this.name = name;
+                    this.year = year;
+               }
+
+               // the property which gets added to .prototype that will be accessible to object of class, also known as instance methods
+               calcAge(){
+                    // this method will be accessible by object of class
+               }
+          
+               // static method
+               static heyThere(){
+                    // this will not accessible to object of class, also known as static method
+                    console.log('i"m from inside');
+               }
+          };
+
+          // static method, accessible only by class name, object of class can't access this hey function
+          Person.hey = function(){
+               console.log('Hey there...');
+          }
+
+          const p1 = new Person('Vivek', 2000);
+          // p1.hey();     // not possible 
+          // p1.heyThere(); // not 
+          Person.hey();
+          Person.heyThere();
+
+     - object.create: 
+          const PersonProto = {
+               calcAge(){
+               console.log(2025 - this.year);
+               },
+               
+               // initializer of props
+               init(name, year){
+                    this.name = name;
+                    this.year = year;
+               },
+          };
+
+          const vivek = Object.create(PersonProto);   // create a new object, & prototype of object will the object we are passing inside the method.
+          console.log(vivek);
+
+          vivek.name = 'V';
+          vivek.year = 2000;
+          vivek.calcAge();
+
+          // instead manually setting properties, we can declare one method inside PersonProto Object
+          const nikate = Object.create(PersonProto);
+          nikate.init('n', 1);
+          nikate.calcAge();
+
+     - Test-2:
+          class Car {
+               constructor(make, speed){
+                    this.make = make;
+                    this.speed = speed;
+               };
+               
+               // getting current speed in miles/hour
+               get speedUS(){
+                    return this.speed/1.6;
+               };
+               
+               set speedUS(sp){
+                    this.speed = sp * 1.6;
+               };
+               
+               accelerate(){
+                    this.speed += 10;
+               };
+               
+               brake(){
+                    this.speed -= 5;
+               }
+          }
+
+          const ford = new Car('FORD', 120);
+          console.log(ford);
+          console.log(`current speed: ${ford.speed} km/h`)
+          console.log(`current speed: ${ford.speedUS} miles/h`)
+
+          ford.speedUS = 200;
+          console.log(`New speed: ${ford.speed} km/h`)
+
+          ford.accelerate();
+          console.log(`New speed: ${ford.speed} km/h`)
+
+          ford.brake();
+          console.log(`New speed: ${ford.speed} km/h`)
+          console.log(`current speed: ${ford.speedUS} miles/h`);
+
+     - function constructor:
+          // constructor function
+          const Person = function(name, birth){
+               this.name = name;
+               this.birth = birth;
+          };
+
+          Person.prototype.calcAge = function(){
+               console.log(`Age: ${2025-this.birth}`);
+          };
+
+          // code repetition  
+          // const Student = function(name, birth, course){
+          //   this.name = name;
+          //   this.birth = birth;
+          //   this.course = course;
+          // };
+
+          // DRY, use the property already existed in Person
+          const Student = function(name, birth, course){
+               Person.call(this, name, birth);
+               this.course = course;
+          }
+
+          Student.prototype = Object.create(Person.prototype);
+
+          Student.prototype.introduce = function(){
+               console.log(`My name is ${this.name}, studying in ${this.course}`);
+          };
+
+          const mike = new Student('mike', 2000, 'CS');
+          mike.introduce();
+          mike.calcAge();
+
+          console.log(mike instanceof Person);
+          console.log(mike instanceof Student);
+          console.log(mike instanceof Object);
+
+          Student.prototype.constructor = Student;
+          console.log(mike.__proto__);
+
+     - TEST-3:
+          const Car = function(make, speed){
+               this.make = make;
+               this.speed = speed;  
+          }
+
+          Car.prototype.accelerate = function(){
+               this.speed = this.speed+10;
+               console.log(this.speed);
+          }
+
+          Car.prototype.brake = function(){
+               // this.speed = this.speed-5;
+               this.speed -= 5;
+               console.log(this.speed);
+          }
+
+          const EV = function(make, speed, charge){
+               Car.call(this, make, speed);    // to inherit the properties
+               this.charge = charge;
+          }
+
+
+          // to access this below brake method you should inherit it from Car using object.create
+          // Tesla.brake();
+          EV.prototype = Object.create(Car.prototype);   // to inherit the method, but this should be done before declaring new method on child.
+
+          EV.prototype.accelerate = function(){
+               this.speed += 20;
+               this.charge -= 1;
+               console.log(`Tesla going at ${this.speed} km/h, with a charge of ${this.charge}%`);
+          }
+
+          EV.prototype.chargeBattery = function(chargeTo){
+               this.charge = chargeTo;
+          }
+
+          const Tesla = new EV('Tesla', 120, 90);
+          console.log(Tesla);
+          Tesla.accelerate();
+          Tesla.chargeBattery(99);
+          console.log(Tesla);
+          Tesla.brake();
+
+     - inheritance in class:
+          class Person {
+               constructor(name, birth){
+                    this.name = name;
+                    this.year = birth;
+               }
+          
+               // method is added to .prototype property of PersonCl2
+               calcAge(){
+                    console.log(`Age is: ${2025 - this.year}`);
+               }
+          };
+
+          // manually adding on prototype property
+          Person.prototype.greet = function(){
+               console.log(`Hey ${this.name}`);
+          }
+
+          class Student extends Person{
+          constructor(name, birth, course){
+          // always needs to happen first
+          super(name, birth);
+          this.course = course;
+          }
+          
+          introduce(){
+          console.log(`hi ${this.name}`);
+          }
+          
+          greet(){
+          console.log(`Hey there this is overriden method ${this.name}`)
+          }
+          };
+
+          const martha = new Student('Martha', 2000, 'CS');
+          console.log(martha);
+          martha.introduce();
+          martha.calcAge();
+          martha.greet();
+
+     - inheritance in object.create:
+          const Person = {
+               calcAge(){
+               console.log(2025-this.birthYear);
+               },
+               
+               init(name, year){
+               this.name = name;
+               this.birthYear = year;
+               },
+          };
+
+          // student inherits the properties of person
+          const Student = Object.create(Person);
+
+          Student.init = function(name, year, course){
+          Person.init.call(this, name, year);
+          this.course = course;
+          }
+
+          Student.introduce = function(){
+          console.log('my name is '+this.name+' studying '+this.course);
+          }
+
+          // jay inherits the properties of Student
+          const jay = Object.create(Student);
+          jay.init('jay', 2010, 'cs');
+          console.log(jay)
+          jay.introduce();
+          jay.calcAge();
+
+     - class:
+          class Account {
+               constructor(owner, pin, currency){
+                    this.owner = owner;
+                    this.pin = pin;
+                    this.movements = [];
+                    this.currency = currency;
+                    this.locale = navigator.language;
+                    
+                    console.log('Thanks a lot '+this.owner+' for opening an account.');
+               };
+               
+               // public interface
+               deposit(val){
+                    this.movements.push(val);
+               };
+               
+               withdraw(val){
+                    this.deposit(-val)
+                    // this.movements.push(-val);
+               }
+               
+               loanApprover(val){
+                    return true;
+               }
+               requestLoan(val){
+                    if(this.loanApprover(val)){
+                         this.deposit(val);
+                         console.log('Loan approved');
+                    }
+               }
+          };
+
+          const vivek = new Account('Vivek', 1111, 'USD');
+          console.log(vivek);
+
+          // -- the properties movements, pin & methods like loanApprover should not be accessible out side of class, for that will use data-encapsulation & data-privacy
+          // // deposit
+          // vivek.movements.push(12);
+
+          // // withdraw
+          // vivek.movements.push(-12);
+
+          vivek.deposit(12);
+          vivek.withdraw(12);
+          console.log(vivek);
+          console.log(vivek.pin);
+
+          vivek.requestLoan(1000);
+          console.log(vivek);
+ 
+     - Encapsulation: making properties & method private so that they should be accessible inside the class. called data-privacy
+          - static fields & methods are not accessible using the object of class, can be accessible using class name
+          eg.
+               class Account {
+                    // public fields
+                    locale = navigator.language;
+                    bank = "Bankist";
+                    
+                    // private fields
+                    #movements = []
+                    #pin;
+                    
+                    constructor(owner, pin, currency){
+                         this.owner = owner;
+                         this.#pin = pin;
+                         this.currency = currency;
+                         
+                         console.log('Thanks a lot '+this.owner+' for opening an account.');
+                    };
+                    
+                    // public interface/ methods/ API
+                    getMovements(){
+                         return this.#movements;
+                    }
+                    
+                    getPin(){
+                         return this.#pin;
+                    }
+                    
+                    updatePin(pin){
+                         this.#pin = pin;
+                    }
+                    
+                    deposit(val){
+                         this.#movements.push(val);
+                    };
+                    
+                    withdraw(val){
+                         this.deposit(-val)
+                         // this.movements.push(-val);
+                    }
+                    
+                    // private method, user should not access
+                    #loanApprover(val){
+                         return true;
+                    }
+                    
+                    requestLoan(val){
+                         if(this.#loanApprover(val)){
+                              this.deposit(val);
+                              console.log('Loan approved');
+                         }
+                    }
+                    static test(){
+                         console.log('hey from class');
+                    }
+                    
+                    static i = 10;
+               };
+
+               const vivek = new Account('Vivek', 1111, 'USD');  
+               console.log(vivek);
+               vivek.deposit(89);
+               vivek.withdraw(7);
+               console.log('movements are: '+vivek.getMovements());
+               console.log('current pin: ', vivek.getPin());
+               vivek.updatePin(1234);
+               console.log('updated pin: ', vivek.getPin());
+
+               // private method
+               // vivek.loanApprover();
+
+               // static method using object
+               // vivek.test();      // not possible
+               // console.log(vivek.i);    // not possible
+               Account.test();      // accessible via class
+               console.log(Account.i);
+
+     - chaining:
+          class Account {
+               // public fields
+               locale = navigator.language;
+               bank = "Bankist";
+               
+               // private fields
+               #movements = []
+               #pin;
+               
+               constructor(owner, pin, currency){
+                    this.owner = owner;
+                    this.#pin = pin;
+                    this.currency = currency;
+                    
+                    console.log('Thanks a lot '+this.owner+' for opening an account.');
+               };
+               
+               // public interface/ methods/ API
+               getMovements(){
+                    return this.#movements;
+               }
+               
+               updatePin(pin){
+                    this.#pin = pin;
+                    return this;          // returning the same object to make chainable
+               }
+               
+               deposit(val){
+                    this.#movements.push(val);
+                    return this;
+               };
+               
+               withdraw(val){
+                    this.deposit(-val) 
+                    return this;
+               }
+               
+               // private method, user should not access
+               #loanApprover(val){
+                    return true;
+               }
+               
+               requestLoan(val){
+                    if(this.#loanApprover(val)){
+                         this.deposit(val);
+                         console.log('Loan approved');
+                    }
+                    return this;
+               }
+          };
+          const vivek = new Account('Vivek', 1111, 'USD');  
+          console.log(vivek);
+          vivek.deposit(1000).withdraw(10).deposit(99999).withdraw(99).requestLoan(12);
+          console.log(vivek.getMovements());
+
+     - TEST-4:
+          class Car {
+               constructor(make, speed){
+               this.make = make;
+               this.speed = speed;
+               };
+               accelerate(){
+               this.speed += 10;
+               return this;
+               };
+               brake(){
+               this.speed -= 5;
+               return this;
+               };
+          };
+
+          class EV extends Car{
+               #charge;
+               constructor(make, speed, charge){
+               super(make, speed);
+               this.#charge = charge;
+               };
+               
+               accelerate(){
+               this.speed += 20;
+               this.#charge--;
+               return this;
+               }
+               getCharge(){
+               return this.#charge;
+               }
+               
+               chargeBattery(charge){
+               this.#charge = charge;
+               return this;
+               };
+          };
+
+          const myEv = new EV('Tesla', 120, 23);
+          console.log(myEv);
+          console.log('Current charge: ' + myEv.getCharge());
+          myEv.accelerate().brake().chargeBattery(100)
+          console.log('Current charge: ' + myEv.getCharge());
+
+
+
+     
 
 ==============================================================================================================================
 ==============================================================================================================================
