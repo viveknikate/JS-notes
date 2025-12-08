@@ -712,7 +712,7 @@ Object methods:
           console.log(`${mark.fullName}'s BMI (${mark.bmi}) is higher than ${john.fullName}'s (${john.bmi})!`)
           else if(johnGreater)
           console.log(`${john.fullName}'s BMI (${john.bmi}) is higher than ${mark.fullName}'s (${mark.bmi})!`)
-     
+
 Loops:
      for(let i=0; i<10; i++)
           console.log("rep ", i);
@@ -4466,7 +4466,7 @@ sec-13: Advanced DOM & Events:
           - <script defer src="script.js"></script>
 ==============================================================================================================================
 sec-14: OOPs:
-     - Object Oriented Programming (OOP)
+	 - Object Oriented Programming (OOP)
      - Encapsulation
      - Abstraction
      - Inheritance
@@ -4870,19 +4870,19 @@ sec-14: OOPs:
           }
 
           class Student extends Person{
-          constructor(name, birth, course){
-          // always needs to happen first
-          super(name, birth);
-          this.course = course;
-          }
-          
-          introduce(){
-          console.log(`hi ${this.name}`);
-          }
-          
-          greet(){
-          console.log(`Hey there this is overriden method ${this.name}`)
-          }
+               constructor(name, birth, course){
+                    // always needs to happen first
+                    super(name, birth);
+                    this.course = course;
+               }
+               
+               introduce(){
+                    console.log(`hi ${this.name}`);
+               }
+               
+               greet(){
+                    console.log(`Hey there this is overriden method ${this.name}`)
+               }
           };
 
           const martha = new Student('Martha', 2000, 'CS');
@@ -4894,12 +4894,12 @@ sec-14: OOPs:
      - inheritance in object.create:
           const Person = {
                calcAge(){
-               console.log(2025-this.birthYear);
+                    console.log(2025-this.birthYear);
                },
                
                init(name, year){
-               this.name = name;
-               this.birthYear = year;
+                    this.name = name;
+                    this.birthYear = year;
                },
           };
 
@@ -4907,12 +4907,12 @@ sec-14: OOPs:
           const Student = Object.create(Person);
 
           Student.init = function(name, year, course){
-          Person.init.call(this, name, year);
-          this.course = course;
+               Person.init.call(this, name, year);
+               this.course = course;
           }
 
           Student.introduce = function(){
-          console.log('my name is '+this.name+' studying '+this.course);
+               console.log('my name is '+this.name+' studying '+this.course);
           }
 
           // jay inherits the properties of Student
@@ -4973,7 +4973,7 @@ sec-14: OOPs:
           vivek.requestLoan(1000);
           console.log(vivek);
  
-     - Encapsulation: making properties & method private so that they should be accessible inside the class. called data-privacy
+     - Encapsulation: making properties & method private so that they should be accessible only inside the class NOT OUTSIDE. called data-privacy
           - static fields & methods are not accessible using the object of class, can be accessible using class name
           eg.
                class Account {
@@ -5150,13 +5150,543 @@ sec-14: OOPs:
           console.log('Current charge: ' + myEv.getCharge());
           myEv.accelerate().brake().chargeBattery(100)
           console.log('Current charge: ' + myEv.getCharge());
-
-
-
-     
+==============================================================================================================================
+sec-15: Mapty app:
 
 ==============================================================================================================================
-==============================================================================================================================
+sec-16: Asynchronous Js:
+	- alert is blocking synchronous code.
+	- setTimeout is non-blocking asynchronous function
+	- synchronous code block the execution & asynchronous code does not block the execution.
+		const req = new XMLHttpRequest();
+		req.open('get', `https://restcountries.com/v2/name/${country}`);
+		req.send();
+		req.addEventListener('load', function () {
+			console.log(req.responseText);
+		})
+	eg.
+		const countries = ['IN', 'japan', 'America', 'China', 'Russia', 'Africa'];
+		countries.forEach(country => {
+			const req = new XMLHttpRequest();
+			req.open('get', `https://restcountries.com/v2/name/${country}`);
+			req.send();
+			req.addEventListener('load', function () {
+			console.log(req.responseText);
+			const [data] = JSON.parse(this.responseText);
+			const html = `
+					<article class="country">
+						<img class="country__img" src="${data.flag}" />
+						<div class="country__data">
+							<h3 class="country__name">${data.name}</h3>
+							<h4 class="country__region">${data.region}</h4>
+							<p class="country__row"><span>👫</span>${(+data.population / 10 ** 6).toFixed(1)}M people</p>
+							<p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+							<p class="country__row"><span>💰</span>${data.currencies[0].code}</p>
+							<p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+						</div>
+					</article>
+				`;
+				
+				countriesContainer.insertAdjacentHTML('beforeend', html);
+				countriesContainer.style.opacity = 1;
+				console.log(data);
+			});
+		})
+
+	- HTTPS is encrypted with TLS or SSL
+	- HTTP request consist of 
+		- HTTP method (get put post delete patch)
+		- request target
+		- http version
+		- http request header
+		- http request body
+
+	- HTTP response consist of
+		- HTTP version
+		- HTTP status code
+		- HTTP status msg
+		- http response header
+		- http response body
+
+	- Callback hell:
+		eg.
+			setTimeout(() => {
+				console.log('1 sec passed');
+				setTimeout(() => {
+					console.log('2 sec passed');
+					setTimeout(() => {
+						console.log('3 sec passed');
+					}, 1000);
+				}, 1000);
+			}, 1000);
+
+	- Promises & fetch api:
+		- a container for an asynchronously delivered value.
+		- or promise is a object used as a placeholder for future result of an asynchronous operation.
+		- container for future value. (response coming from ajax call)
+
+		- at start the promise is pending
+		- once asynchronous task has finished his job, the promise will be settled.
+		- setttled means fullfilled or rejected.
+		- fullfilled means that the asynchronous task was successful. then we consume the promise value.
+		- rejected means that the asynchronous task failed.
+		eg.
+			const request = fetch('https://restcountries.com/v2/name/japan');
+			console.log(request);
+		eg.
+			function renderCountry(data){
+				const html = `
+					<article class="country">
+						<img class="country__img" src="${data.flag}" />
+						<div class="country__data">
+							<h3 class="country__name">${data.name}</h3>
+							<h4 class="country__region">${data.region}</h4>
+							<p class="country__row"><span>👫</span>${(+data.population / 10 ** 6).toFixed(1)}M people</p>
+							<p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+							<p class="country__row"><span>💰</span>${data.currencies[0].code}</p>
+							<p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+						</div>
+					</article>
+				`;
+				
+				countriesContainer.insertAdjacentHTML('beforeend', html);
+				countriesContainer.style.opacity = 1;
+			}
+			function country(country){
+				// fetch('https://restcountries.com/v2/name/' + country).then(function(res){
+				// 	return res.json();							// this json() returns the new promise, so we have to handle this with one more then
+				// }).then(function(data){
+				// 	console.log(data);
+				// }).catch(err => console.log(err));
+
+				// instead of above
+				fetch('https://restcountries.com/v2/name/' + country).then(res => res.json()).then(data => renderCountry(data[0])).catch(err => console.log(err));
+			}
+	
+	- Handling Rejected Promises: catch & finally block:
+		function country(country){
+			fetch('https://restcountries.com/v2/name/' + country).then(res => res.json(), err => alert(err)).then(data => renderCountry(data[0]))
+		}
+
+		// or using catch() block
+			fetch('https://restcountries.com/v2/name/' + country).then(res => res.json()).then(data => renderCountry(data[0])).catch(err => alert(err))
+			
+		// eg.
+			function renderError(msg){
+				countriesContainer.innerHTML = '';
+				countriesContainer.insertAdjacentText('beforeend', msg);
+				countriesContainer.style.opacity = 1;
+			}
+			function country(country){
+				fetch('https://restcountries.com/v2/name/' + country).then(res => res.json()).then(data => renderCountry(data[0])).catch(err => {
+					console.error(err + '❌❌❌')
+					renderError('Something went wrong '+ err.message + '❌❌❌ try again');
+				})
+			}
+
+		// finally: handling the error when user disconnected from internet
+			function country(country){
+				fetch('https://restcountries.com/v2/name/' + country).then(res => res.json()).then(data => renderCountry(data[0])).catch(err => {
+					console.error(err + '❌❌❌')
+					renderError('Something went wrong '+ err.message + '❌❌❌ try again');
+				}).finally(() => {
+					countriesContainer.style.opacity = 1;
+				})
+			}
+			btn.addEventListener('click', function(){
+				countriesContainer.innerHTML = '';
+				country('india');
+			})
+
+		// handling the error when data couldn't find for given input
+			function country(country){
+				fetch('https://restcountries.com/v2/name/' + country).then((res) => {
+					if(!res.ok) throw new Error('Country not found.!!' + res.status + ' ' + res.statusText)
+					return res.json()
+				})
+				.then(data => renderCountry(data[0])).catch(err => {
+					console.error(err + '❌❌❌')
+					renderError('Something went wrong '+ err.message + '❌❌❌ try again');
+				})
+				.finally(() => {
+					countriesContainer.style.opacity = 1;
+				})
+			}
+			btn.addEventListener('click', function(){
+				countriesContainer.innerHTML = '';
+				country('ewrjewlkrj');
+			})
+
+		// TEST:
+			function renderCountry(data) {
+				const html = `
+						<article class="country">
+							<img class="country__img" src="${data.flag}" />
+							<div class="country__data">
+								<h3 class="country__name">${data.name}</h3>
+								<h4 class="country__region">${data.region}</h4>
+								<p class="country__row"><span>👫</span>${(+data.population / 10 ** 6).toFixed(1)}M people</p>
+								<p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+								<p class="country__row"><span>💰</span>${data.currencies[0].code}</p>
+								<p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+							</div>
+						</article>
+					`;
+				countriesContainer.insertAdjacentHTML('beforeend', html);
+				countriesContainer.style.opacity = 1;
+			}
+			function country(country) {
+				fetch('https://restcountries.com/v2/name/' + country)
+				.then((res) => {
+					if(!res.ok) throw new Error('Problem while requesting country');
+					return res.json()
+				})
+				.then(data => renderCountry(data[0]))
+				.catch(err => renderError(err.message));
+			}
+			const renderError =(msg) =>{
+				countriesContainer.innerHTML = '';
+				countriesContainer.insertAdjacentText('beforeend', msg);
+				countriesContainer.style.opacity = 1;
+			}
+			const WhereAmI = (lat, long) => {
+				fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}`)
+				.then((res) => {
+					if(!res.ok) throw new Error(`Problem with geocoding ${res.status} ${res.statusText}`)
+					return res.json()
+				})
+				.then(data => {
+					console.log(data);
+					console.log(`You are in ${data.city}, ${data.countryName}`);
+					country(data.countryName)
+				}).catch(err => renderError(err.message))
+			}
+
+			btn.addEventListener('click', function(){
+				WhereAmI(52.508, 13.381);
+				WhereAmI(19.037, 72.873);
+				WhereAmI(-33.933, 18.474);
+				btn.style.display = 'none'
+			})
+
+	- in javascript is single threaded language. so only one task can be executed at a time.
+	- loading image in javascript is asynchronous
+
+	- callbacks & microtasks:
+		console.log("test start")
+		setTimeout(() =>{
+			console.log('0 sec');          ---> setTimeout is kept inside callback queue, will be printed at last
+		}, 0)
+		Promise.resolve('its resolved 1. ').then(res => console.log(res));			--> kept inside microtask queue (microtask queue has high priority, it executes first before callback queue)
+		Promise.resolve('its resolved 2. ').then(res => {
+			for(let i=0; i<1000000000; i++){}
+			console.log(res)
+		});			--> kept inside microtask queue (microtask queue has high priority, it executes first before callback queue)
+		console.log('test end')
+
+	- Building promise:
+		const lottery = new Promise((res, rej) => {
+			const num = Math.trunc(Math.random() * 11);
+			console.log(num);
+			setTimeout(() => {
+				if(num > 5) res('This is resolved Promise, Accepted.!');
+				rej(new Error('This is rejected Promise, Rejected.!'));
+			}, 2000);
+		})
+
+		lottery.then(res => console.log(res)).catch(err => console.error(err));
+
+		Promise.resolve('Abc').then((res) => console.log(res));
+		Promise.reject( new Error('Abc')).catch((err) => console.error(err));
+
+	- Promisifying geolocation api:
+		navigator.geolocation.getCurrentPosition(pos => console.log(pos),err => console.err(err))
+		---------
+		// navigator.geolocation.getCurrentPosition(pos => console.log(pos),err => console.err(err));
+		// promisified geolocation api
+		const getPosition = function(){
+			return new Promise(function(resolve, reject){
+				// navigator.geolocation.getCurrentPosition(
+				// 	position => resolve(position),
+				// 	err => reject(err)
+				// )
+				// or
+				navigator.geolocation.getCurrentPosition(resolve,reject);
+			})
+		}
+		// getPosition().then(pos => console.log(pos)).catch(err => console.error(err))
+		btn.addEventListener('click', ()=>{
+			getPosition()
+			.then(pos => {
+				const {latitude: lat, longitude: lng} = pos.coords;
+				console.log(lat, lng);
+				return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+			})
+			.then(res => {
+				if(!res.ok) throw new Error(`Problem with geocoding ${res.status} ${res.statusText}`)
+				return res.json()
+			})
+			.then(data => country(data.countryName))
+			.catch(err => console.error(err));
+		})
+
+	- TEST:
+		const createImage = function(path){
+			return new Promise(function(resolve, reject){
+				const img = document.createElement('img')
+				img.src = path;
+
+				img.addEventListener('load', ()=>{
+					document.body.append(img);
+					resolve(img);
+				});
+
+				img.addEventListener('error', ()=>{
+					reject(new Error('Image not found'))
+				})
+			})
+		}
+
+		const wait = (sec) => {
+			return new Promise((resolve) =>{
+				setTimeout(() => {
+					resolve()
+				}, sec*1000);
+			})
+		}
+
+		let curImg;
+		createImage('img/img-1.jpg')
+			.then(res => {
+				curImg = res
+				console.log('first loaded')
+				return wait(2);
+			})
+			.then(() =>{
+				curImg.style.display = 'none';
+				return createImage('img/img-2.jpg')
+			})
+			.then((res) => {
+				curImg = res;
+				console.log('second loaded')
+				return wait(2);
+			})
+			.then(() => {
+				curImg.style.display = 'none';
+				return createImage('img/img-3.jpg')
+			})
+			.then((res) => {
+				curImg = res;
+				console.log('third loaded')
+			}).catch(err => console.log(err));
+
+	- Consuming Promises:
+		- inside async function we can have one or more await statements.
+		eg.
+			const whereAmI = async (country) => {
+				// fetch(`https://restcountries.com/v2/name/${country}`)
+				// 	.then(res => res.json())
+				// 	.then(data => console.log(data));
+				// are same
+
+				const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+				const data = await res.json();
+				console.log(data);
+				renderCountry(data[1]);
+			}
+
+		eg.
+			const getPosition = () => {
+				return new Promise(function(resolve, reject){
+					navigator.geolocation.getCurrentPosition(resolve, reject);
+				})
+			}
+			const whereAmI = async () => {
+				const pos = await getPosition();
+				const {latitude: lat, longitude: lng} = pos.coords; 
+				const resCountry = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+				const dataCountry = await resCountry.json();
+				console.log("country is :", dataCountry);
+
+				const res = await fetch(`https://restcountries.com/v2/name/${dataCountry.countryName}`);
+				const data = await res.json();
+				
+				renderCountry(data[1]);
+			}
+			whereAmI();
+
+	- Error handling:
+		const whereAmI = async () => {
+			try {
+				const pos = await getPosition();
+				const {latitude: lat, longitude: lng} = pos.coords; 
+				const resCountry = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`)
+				if(!resCountry.ok) throw new Error(`Problem with geocoding ${resCountry.status} ${resCountry.statusText}`)
+
+				const dataCountry = await resCountry.json();
+				console.log("country is :", dataCountry);
+			
+				const res = await fetch(`https://restcountries.com/v2/name/${dataCountry.countryName}`);
+				if(!res.ok) throw new Error('country not found ..!' + res.statusText)
+
+				const data = await res.json();
+				renderCountry(data[1]);							// renderCountry(data[0]);
+			} catch (error) {
+				console.error('Error in getting location ' + error.message);
+			}
+		}
+
+	- return values from async functions:
+		- async functions always returns promise at first.
+		- await only works inside async function.
+		eg.
+			const whereAmI = async () => {
+				try {
+					// ...
+					return "success";
+				} catch (error) {
+					console.error('Error in getting location ' + error.message);
+					
+					// to propagate the error to the parent
+					throw error;
+				}
+			}
+
+			// to make all statement work in sequence.
+			console.log('this is first statement');
+			whereAmI()
+			.then((result) => {
+				console.log('this is second statement');
+				console.log(result);
+			})
+			.catch(err => {
+				console.log('this is second statement');
+				console.error("Reached to parent: "+err)
+			})
+			.finally(()=>{
+				console.log('the last statement ');
+				console.log("finally called");
+			});
+	
+		// to create a top level async function: using IIFE
+			(async function() {
+				try {
+					const value = await whereAmI();
+					console.log(value)
+				} catch (error) {
+					console.log('2nd statement');
+					console.error('FAced some issue in WhereAmI function.!');
+				} finally {
+					console.log('last statement 3rd');
+				}
+			})();
+
+	- one after other:
+		const getJSON = function(url, errorMsg='') {
+			return fetch(url).then(res => {
+				if(!res.ok) throw new Error(`${errorMsg} (${res.status})`)
+				return res.json();
+			}).catch((err) => console.error(err))
+		}
+		const getData3Countries = async function(c1, c2, c3){
+			try {
+				const [data1] = await getJSON(`https://restcountries.com/v2/name/${c1}`, 'issue while fetching data of country 1');
+				const [data2] = await getJSON(`https://restcountries.com/v2/name/${c2}`, 'issue while fetching data of country 2');
+				const [data3] = await getJSON(`https://restcountries.com/v2/name/${c3}`, 'issue while fetching data of country 3');
+				// this will happens one after other not in parallel
+				
+				console.log([data1.capital, data2.capital, data3.capital])
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		getData3Countries('india', 'America', 'China');
+
+	- in parallel: Promise.all()
+		- it returns an array of settled promises
+		- if one of the request fails, all will fail
+		const getData3Countries = async function(c1, c2, c3){
+			try {
+				// if one of the request fails, all will fail
+				const data = await Promise.all([
+					getJSON(`https://restcountries.com/v2/name/${c1}`, 'issue while fetching data of country 1'),
+					getJSON(`https://restcountries.com/v2/name/${c2}`, 'issue while fetching data of country 2'), 
+					getJSON(`https://restcountries.com/v2/name/${c3}`, 'issue while fetching data of country 3'),
+				])
+				// this will happens in parallel
+				console.log(data)
+				const capitals = data.map(d => d[0].capital);
+				console.log(capitals);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+
+	- race: 
+		- it returns the first settled promise, event if it fails.
+		(async function(){
+			const winner = await Promise.race([
+				getJSON('https://restcountries.com/v2/name/America', 'America error'),
+				getJSON('https://restcountries.com/v2/name/Japan','Japan error'),
+				getJSON('https://restcountries.com/v2/name/Russia','Russia error'),
+			]);
+			console.log(winner[0]);
+		})();
+
+	- Timeout:
+		const timeout = function (sec) {
+			return new Promise(function(_, reject) {
+				setTimeout(function() {
+					reject(new Error('Request took too long! TimeOut'));
+				}, sec*1000);
+			});
+		}
+		const getJSON = function (url, errorMsg = '') {
+			return fetch(url).then(res => {
+				if (!res.ok) throw new Error(`${errorMsg} (${res.status})`);
+				return res.json();
+			});
+		};
+
+		(async function(){
+			Promise.race([
+				getJSON('https://restcountries.com/v2/name/America', 'America error'),
+				getJSON('https://restcountries.com/v2/name/Japan','Japan error'),
+				getJSON('https://restcountries.com/v2/name/Russia','Russia error'),
+				timeout(1)
+			]).then(res => console.log(res[0])).catch(err => console.error(err))
+		})();
+
+	- all:
+		- it returns an array of first settled promises (failed / passed)
+		Promise.all([
+			Promise.resolve('1'),
+			Promise.resolve('2'),
+			Promise.resolve('3'),
+			Promise.reject('Error2'),
+			Promise.reject('Error1'),
+		]).then(res => console.log("all ",res)).catch(err => console.error(err));
+
+	- Promise.allSettled:
+		- it returns an array of settled promises, all promises even they are rejected		
+		Promise.allSettled([
+			Promise.resolve('1'),
+			Promise.resolve('2'),
+			Promise.resolve('3'),
+			Promise.reject('Error1'),
+			Promise.reject('Error2'),
+		]).then(res => console.log("allSettled: ", res)).catch(err => console.error(err));
+
+	- any:
+		- it returns the first settled promise, ignores rejected.
+		Promise.any([
+			Promise.reject('Error1'),
+			Promise.reject('Error2'),
+			Promise.resolve('2'),
+			Promise.resolve('1'),
+			Promise.resolve('3'),
+		]).then(res => console.log("any: ",res)).catch(err => console.error(err));
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================
