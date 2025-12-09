@@ -5317,7 +5317,7 @@ sec-16: Asynchronous Js:
 				country('ewrjewlkrj');
 			})
 
-		// TEST:
+		// TEST-1:
 			function renderCountry(data) {
 				const html = `
 						<article class="country">
@@ -5430,7 +5430,7 @@ sec-16: Asynchronous Js:
 			.catch(err => console.error(err));
 		})
 
-	- TEST:
+	- TEST-2:
 		const createImage = function(path){
 			return new Promise(function(resolve, reject){
 				const img = document.createElement('img')
@@ -5538,7 +5538,7 @@ sec-16: Asynchronous Js:
 
 	- return values from async functions:
 		- async functions always returns promise at first.
-		- await only works inside async function.
+		- await only works inside async function. or await can work in JS modules. (Refer Top Level await notes)
 		eg.
 			const whereAmI = async () => {
 				try {
@@ -5687,7 +5687,171 @@ sec-16: Asynchronous Js:
 			Promise.resolve('3'),
 		]).then(res => console.log("any: ",res)).catch(err => console.error(err));
 
+	- TEST-3: with Async/await of TEST-2
+		- the function who returns promise we've to consume it with async/await
+		const loadNpause = async () => {
+			try {
+				let myImage = await createImage('img/img-1.jpg');
+				if (!myImage) throw new Error('error in 1st');
+				await wait(2);
+				myImage.style.display = 'none';
+				
+				myImage = await createImage('img/img-2.jpg');
+				console.log(myImage);
+				if (!myImage) throw new Error('error in 2nd');
+				await wait(2);
+				myImage.style.display = 'none';
+				
+				myImage = await createImage('img/img-3.jpg');
+				if (!myImage) throw new Error('error in 3rd');
+				await wait(2);
+				myImage.style.display = 'none';
+			} catch (err) {
+				console.error(err.message);
+			}
+		};
+
+		// loadNpause();
+
+		const loadAll = async function() {
+			const imgArr = ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg'];
+			const imgs = imgArr.map(async (img) => await createImage(img));			// returns array of promises
+			console.log(imgs);
+
+			// to take out the values from promises
+			const allImages = await Promise.all(imgs)
+			console.log(allImages);
+
+			allImages.forEach(img => img.classList.add('parallel'));
+		}
+
+		loadAll()
 ==============================================================================================================================
+sec-17: Modern Js Developement:
+	- once development is complete we need to deploy the applicatino to server for end-users
+	- before deployment the application gets builded, minified and optimized (bundling --> transpiling/polyfilling)
+		- bundling means joins all modules into one file.
+		- transpiling/polyfilling means converting modern js back to older js using Babel (so old browser also works)
+
+	- this build process is carried out by tool webpack or parcel.
+
+	- Modules:
+		- is just a re-usable piece of code that encapsulates implementation details
+		- we export values from file (that export also known as public API)
+		- import statements are hoisted. (keep them anywhere)
+
+									Modules 											script
+		top level variables		can't use modules variables						    Global variable, can be accessed
+								outside of module, unless exported
+								then imported where required.
+		this keyword			 undefined 											window object
+		strict mode        		 default works in strict mode 						by default works in sloppy mode
+		import/export			 works here											does not works here
+		HTML linking           <script type="module">								<script>
+		downloading						asynchronously										synchronously
+
+	- import statements will get executed first before any other statements in file.
+	eg.
+		html: into header
+			<script type="module" src="script.js"></script>
+		script.js
+			// import zzz from './scriptModule.js';
+			import mainFunc from "./scriptModule.js";
+			import {a, secondValue, c, logger, quality as Q, totalPrice} from './scriptModule.js';				// -----> importing with different name
+
+			console.log('main Script');
+			// console.log('zzz is : ', zzz);
+
+			logger()
+			console.log(a, secondValue, c, totalPrice);
+			console.log(Q)
+			mainFunc()
+		scriptModule.js
+			console.log('module script')
+			export const logger = function(){
+				console.log('hey there.')
+			}
+
+			export const totalPrice = 456
+			export const quality = 'A1'					// these are named exports
+
+			// exporting all in one go
+			const a = 1, b =78, c =5;
+			export {a, b as secondValue, c}        // exporting with different name
+
+			// single module has only one default export
+			export default function mainFunc(){
+				console.log('This is main func');
+			}
+
+			// default might be function of variable
+			// const zzz = 'sleepy'
+			// export default zzz;
+
+		// import using *
+			scriptModule.js
+				export default function(){
+					console.log('default function can be imported with any name');
+				}
+			script.js
+				import GGG_Random, * as mainObj from './scriptModule.js'			// * for named exports
+				console.log('main Script');
+				mainObj.logger()
+
+				console.log(mainObj.a, mainObj.secondValue, mainObj.c, mainObj.totalPrice);
+				console.log(mainObj.quality)
+				GGG_Random()
+
+	- import are not copy of export, they are live connections.
+
+	- Top Level Await:
+		- to make top level await work, we need to use module in script tag.
+			<script type="module" src="script.js"></script>
+		- this top level await can block the code flow. check below Example.
+		eg.
+			console.log('From module hey');
+			const res = await fetch('https://jsonplaceholder.typicode.com/posts');				// ---> this will stop the further execution of code till it receive the response.
+			const data = await res.json();
+			console.log(data);
+			console.log('done dusted!');
+		
+		eg.
+			const getLastPost = async () => {
+				const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+				const data = await res.json();
+				// different ways
+				// const lastData = data[data.length - 1];
+				// const lastData = data.slice(-1)[0];
+				const lastData = data.at(-1);
+				return {title: lastData.title, body: lastData.body}
+			}
+
+			// const got = getLastPost();									// this is async function returns promise, so should use await. or use .then() chaining
+			// console.log(got);
+			const got = await getLastPost();
+			console.log(got);
+
+			const gotUsingThen = getLastPost().then(data => console.log(data)).catch(err => console.error(err));
+
+		- top level await blocks the code execution.
+			- consider 2 files parent.js & child.js
+			child.js
+				import './parent.js'							// so we're importing the parent here, 
+				console.log('First')						// this first & second will be printed after we complete the execution of parent.js file
+				console.log('Second')
+			parent.js
+				console.log("I'm parent...")
+				await fetch('https://jsonplaceholder.typicode.com/posts');				// this is a top-level await, it will block the execution of code temporarily. till it receive the response.
+				console.log('Third')
+			script.js
+				import './child.js'
+				console.log('Hey there..');					// ---> this will be printed at last
+
+	- The module pattern:
+		
+
+
+
 ==============================================================================================================================
 ==============================================================================================================================
 ==============================================================================================================================

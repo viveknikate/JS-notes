@@ -1,5 +1,3 @@
-'use strict';
-
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
@@ -10,3 +8,4 @@ const countriesContainer = document.querySelector('.countries');
 // https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}
 
 ///////////////////////////////////
+console.log('Hey there..');					// ---> this will be printed at last
