@@ -5848,6 +5848,90 @@ sec-17: Modern Js Developement:
 				console.log('Hey there..');					// ---> this will be printed at last
 
 	- The module pattern:
+		// IIFE
+		const shoppingCart = (function(){
+			const cart = [];
+			let quality = 'A1', quantity = 90;
+
+			const addToCart = function(cnt, item){
+				console.log(`${cnt} ${item} has been added to the cart`);
+				cart.push([cnt, item]);
+			}
+
+			const contentCheck = function(){
+				console.log("cart: ", cart);
+				console.log("quality: ", quality);
+				console.log('quantity: ', quantity);
+			}
+
+			const changeQuality = function(newVal){
+				quality = newVal;
+			}
+			const nice = function(){
+				console.log('nice');
+			}
+			const changeQuantity = function(newVal){
+				quantity = newVal;
+			}
+
+			return {
+				addToCart,
+				contentCheck,
+				changeQuality,
+				changeQuantity,
+			};
+		})();
+
+		shoppingCart.nice()      // not possible.
+		shoppingCart.contentCheck();
+		console.log('------------------------------------------------------------------------')
+		shoppingCart.addToCart(2, 'Pizza');
+		shoppingCart.contentCheck();
+		console.log('------------------------------------------------------------------------')
+		shoppingCart.changeQuality('Greater');
+		shoppingCart.contentCheck();
+		console.log('------------------------------------------------------------------------')
+		shoppingCart.changeQuantity(456);
+		shoppingCart.contentCheck();
+
+	- Basics of Terminal:
+		- ls or dir
+		- cd
+		- cd ../../../
+		- pwd - present working directory
+		- mkdir - create folder
+		- cat <file_name>  - print the content of the file
+		- clear or cls or crtl + L 		- to clear the screen
+		- touch or edit <file_name>     - to create file
+		- rm <file_name> or del <file_name>				- to delete file
+		- rm <folder_name> or rmdir <folder_name>		- to remove folder
+
+	- NPM - Node Package Manager:
+		- npm initialization:
+			- npm init
+			- npm init -y 				-- creates package.json file, which stores complete configuration of project & details.
+
+		- installing package:
+			npm i leaflet or npm install leaflet
+			- to install latest version of package: npm install leaflet@latest
+			- to install specific version of package: npm install leaflet@1.7.1
+
+		- updating package:
+			npm update leaflet
+
+		- uninstalling package:
+			npm uninstall leaflet
+		
+		- to check all the installed packages:
+			npm list
+			npm ls
+
+		- to check the version of package:
+			npm list leaflet
+			npm ls leaflet
+
+
+
 		
 
 
