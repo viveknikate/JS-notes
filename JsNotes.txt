@@ -5930,12 +5930,95 @@ sec-17: Modern Js Developement:
 			npm list leaflet
 			npm ls leaflet
 
+		- Hot Module Reloading:
+			- whenever we change one of the module, then it'll triger the re-build. then new modified version will injected into
+			  browser without triggering whole page reload.
 
+	- Declarative & Function Programming:
+		- imperative
+		- Declarative
+	
+	- Array or Object immutable:
+		- currying concept
+		eg.
+			const arr = [1,2,3,4];
+			console.log("Before: ", arr);
+			arr.push(5);
+			arr[0] = 99;
+			console.log("Pushed: ", arr);
 
+			// Freezing
+			const arr1 = Object.freeze([1,2,3]);
+			console.log("arr1: ", arr1);
+			// arr1.push(9)      // mutation is not possible due to freeze, Uncaught TypeError: Cannot add property 3, object is not extensible
+			arr1[0] = 99;            // won't give error, but also change will not happen on Freeze
+			console.log("new Arr1 ", arr1);
+
+			const t1 = {
+				key1: 'Val1',
+			};
+
+			console.log("Before t1: ", t1)
+			t1.key2 = 'val2';
+			console.log("New t1: ", t1)
+
+			// with freeze
+			const t2 = Object.freeze({
+				key1: 'val1',
+			arr: [1,2,3],
+			});
+
+			console.log("Before t2: ", t2);
+			t2.key2 = 'val2';              // won't give error but will not add new key2. 
+			console.log("new t2: ", t2)
+
+			// but could not change arr completely like t2.arr = [8,3]. NOT possible.
+			t2.arr.push(4,5,6);                    // just freezed top level not nested.
+			console.log("new t2: ", t2)
 		
+		// seal
+			- Object.seal()
+			const t3 = Object.seal({
+				key1: 'val1',
+				arr: [1,2,3],
+			});
+			console.log("Before t3: ", t3);
+			t3.key2 = 'val2';              // won't give error but will not add new key2. 
+			console.log("new t3: ", t3)
 
+			// but could not change arr completely like t2.arr = [8,3]. NOT possible.
+			t3.arr.push(4,5,6);                    // just freezed top level not nested.
+			console.log("new t3: ", t3)
 
+			// but i can modification to key1 is possible in seal.						
+				const t1 = Object.seal({
+				key1: 'First',
+				arr: [1,2,3]
+				});
 
+				const t2 = {
+				key:'asdf',
+				arr:[12,3]
+				}
+
+				console.log(t1);
+				t1.nice = 'Good';
+				console.log(t1);      // no addition of key for seal
+
+				console.log(t2)
+				delete t2.key;
+				console.log(t2)
+
+				t1.key1 = 'My new value';
+				console.log(t1);
 ==============================================================================================================================
+==============================================================================================================================
+Sec-19: Git:
+	- for frontend project deployement, we can use
+		- netlify
+		- github
+		- vercel
+	- for full stack project we can use render
+	- 
 ==============================================================================================================================
 ==============================================================================================================================
