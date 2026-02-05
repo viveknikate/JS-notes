@@ -3366,6 +3366,11 @@ Sec-11: Arrays:
           const b = a.with(5, 87);
           console.log(b);
           console.log(a);            // original array still same
+			
+		const a = [1,2,3,4,5];
+		const b = a.with(0, 3).with(4, 87).with(-2, 90);
+		console.log(a, b);    // [ 1, 2, 3, 4, 5 ] [ 3, 2, 3, 90, 87 ]
+		// changes the value at given index & returns new array, -ve index considered back from array
 
      - reduce:
           // grouping array by reduce.
