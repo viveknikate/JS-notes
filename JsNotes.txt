@@ -3,6 +3,50 @@ Course Link: https://github.com/jonasschmedtmann/complete-javascript-course
 ==============================================================================================================================
 Sec - 1: Intro
 ==============================================================================================================================
+Js Practice:
+	console.log(' Hey there.')
+	const a = [1,2,3,4,5,6,7,8,9,10];
+	
+	// printing only element using forEach
+	a.forEach(function(ele, indx, a) {
+	    console.log(ele, indx, a);
+	});
+	
+	// for
+	for(let i=0; i<a.length; i++)
+	    console.log(a[i]);
+	
+	console.log('using for-of loop');
+	
+	const b = [11,22,33,44,55];
+	for(const val of b)
+	    console.log(val);
+	
+	// filtering even values only
+	function isEven(val){
+	    return !(val&1);
+	}
+	console.log(a.filter(isEven));
+	console.log(a.filter((val) => val % 2 !== 0));
+	
+	// map
+	const newArr = a.map((each) => each * 2);
+	const powerGenerator = (val) => val ** 2;
+	const newArr2 = a.map(powerGenerator);
+	console.log(newArr);
+	console.log(newArr2);
+	
+	// find
+	console.log('is 5 exist in a? ', a.find((each) => each === 5));
+	
+	// finding index of first/ last element (2)
+	const c = [1,2,3,4,5, 2, 3, 4];
+	console.log('first index: ', c.indexOf(2))
+	console.log('last index 2: ', c.lastIndexOf(2))
+	
+	console.log('is 5 exist in a? ', a.indexOf(5));
+	console.log('is 50 exist in a? ', a.indexOf(50) === -1 ? 'not exist' : 'exist');
+==============================================================================================================================
 Sec - 2: Js Fundamentals: Part-1
 ==============================================================================================================================
 console.log(11 +11 )
